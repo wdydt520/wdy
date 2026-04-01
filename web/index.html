@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医三维辨证辅助诊断系统</title>
+    <style>
+        :root {
+            --primary: #c0392b;
+            --primary-light: #e74c3c;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #faf8f5;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: 2px; }
+        .header p { font-size: 14px; opacity: 0.85; }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Container */
+        .container { max-width: 960px; margin: 0 auto; padding: 24px 16px 80px; }
+
+        /* Card */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 22px; }
+
+        /* Input */
+        .input-group { margin-bottom: 16px; }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+        .input-group textarea,
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: #fff;
+            color: var(--text);
+        }
+        .input-group textarea:focus,
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+        }
+        .input-group textarea { min-height: 120px; resize: vertical; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+            width: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(192,57,43,0.4);
+        }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            background: var(--border);
+            color: var(--secondary);
+        }
+        .btn-sm:hover { background: #c8d6e5; }
+        .btn-sm.active { background: var(--primary); color: #fff; }
+
+        /* Quick Tags */
+        .quick-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .quick-tag {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+            color: var(--text);
+        }
+        .quick-tag:hover { border-color: var(--primary); color: var(--primary); }
+        .quick-tag.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Dimension Scores */
+        .dimension-section { margin-bottom: 24px; }
+        .dimension-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .dimension-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-wuqi { background: var(--primary); }
+        .dot-zangfu { background: var(--accent); }
+        .dot-xieliu { background: #27ae60; }
+        .dimension-items { display: flex; flex-direction: column; gap: 10px; }
+        .dim-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .dim-label { width: 48px; font-size: 14px; font-weight: 600; text-align: right; }
+        .dim-bar-bg {
+            flex: 1;
+            height: 24px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .dim-bar {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+        }
+        .bar-wuqi { background: linear-gradient(90deg, var(--primary), #e17055); }
+        .bar-zangfu { background: linear-gradient(90deg, var(--accent), #fdcb6e); }
+        .bar-xieliu { background: linear-gradient(90deg, #27ae60, #00b894); }
+        .dim-score { width: 52px; font-size: 13px; font-weight: 700; text-align: right; }
+        .dim-mechanism {
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: #fef9f4;
+            border-left: 3px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Results */
+        .result-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+        .result-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .result-name { font-size: 20px; font-weight: 700; }
+        .result-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-wuqi { background: #ffeaa7; color: #d35400; }
+        .badge-zangfu { background: #fab1a0; color: #d63031; }
+        .badge-xieliu { background: #55efc4; color: #006266; }
+        .result-confidence {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        .confidence-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .confidence-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transition: width 0.8s ease;
+        }
+        .result-symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .result-tag {
+            padding: 4px 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .result-tag.primary { background: #ffeaa7; color: #d35400; }
+        .result-tag.secondary { background: #dfe6e9; color: #636e72; }
+        .result-formula {
+            padding: 10px 14px;
+            background: #fef9f4;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .result-formula strong { color: var(--primary); }
+
+        /* Steps */
+        .step { margin-bottom: 24px; }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        .causal-chain {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #fef9f4 0%, #f8f0e3 100%);
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        .causal-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+        }
+        .causal-step:not(:last-child) { border-bottom: 1px dashed #ddd; }
+        .causal-arrow { color: var(--primary); font-weight: 700; white-space: nowrap; }
+        .causal-text { font-size: 14px; line-height: 1.6; }
+
+        /* Gang-Mu */
+        .gang-mu {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #fff;
+            border-radius: 12px;
+            text-align: center;
+            margin: 16px 0;
+        }
+        .gang-mu-label { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+        .gang-mu-text { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+
+        /* Hidden */
+        .hidden { display: none !important; }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 16px 8px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .stat-num { font-size: 28px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+
+        /* Disclaimer */
+        .disclaimer {
+            text-align: center;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+            background: #fff3cd;
+            border-radius: 12px;
+            border: 1px solid #ffc107;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 22px; }
+            .container { padding: 16px 12px 60px; }
+            .card { padding: 20px; }
+            .input-row { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>中医三维辨证辅助诊断</h1>
+    <p>基于「五气 · 脏腑 · 邪留」三维辨证框架</p>
+    <div class="badge">理论来源：欧阳锜《证病结合用药式》 | 101证候 · 133方剂 · 4090条疾病应用</div>
+</div>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-item"><div class="stat-num">76</div><div class="stat-label">症状条目</div></div>
+        <div class="stat-item"><div class="stat-num">101</div><div class="stat-label">证候数据</div></div>
+        <div class="stat-item"><div class="stat-num">133</div><div class="stat-label">方剂知识</div></div>
+        <div class="stat-item"><div class="stat-num">4090</div><div class="stat-label">疾病应用</div></div>
+    </div>
+
+    <!-- Input -->
+    <div class="card">
+        <div class="card-title"><span class="icon">📝</span>症状输入</div>
+        <div class="input-group">
+            <label>请输入患者症状描述</label>
+            <textarea id="symptoms" placeholder="示例：发热，恶寒，无汗，头痛，身痛，咳嗽痰白，胸闷气短，舌淡红苔白腻，脉浮紧"></textarea>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label>舌象（选填）</label>
+                <input id="tongue" placeholder="如：舌红苔黄腻">
+            </div>
+            <div class="input-group">
+                <label>脉象（选填）</label>
+                <input id="pulse" placeholder="如：弦滑数">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>快捷症状标签（点击添加）</label>
+            <div class="quick-tags" id="quickTags"></div>
+        </div>
+        <button class="btn btn-primary" onclick="diagnose()">🔍 开始三维辨证分析</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+        <!-- Step 1 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">📋</span>步骤一：信息采集</div>
+            <div class="result-symptoms" id="collectedSymptoms"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">🧬</span>步骤二：三维归因</div>
+            <div class="dimension-section">
+                <div class="dimension-header"><div class="dimension-dot dot-wuqi"></div>五气维度（外感/内生邪气）</div>
+                <div class="dimension-items" id="wuqiDims"></div>
+                <div class="dim-mechanism" id="wuqiMechanism"></div>
+            </div>
+            <div class="dimension-section">
+                <div class="dimension-header"><div class="dimension-dot dot-zangfu"></div>脏腑维度（病位定位）</div>
+                <div class="dimension-items" id="zangfuDims"></div>
+                <div class="dim-mechanism" id="zangfuMechanism"></div>
+            </div>
+            <div class="dimension-section">
+                <div class="dimension-header"><div class="dimension-dot dot-xieliu"></div>邪留维度（病理产物）</div>
+                <div class="dimension-items" id="xieliuDims"></div>
+                <div class="dim-mechanism" id="xieliuMechanism"></div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">🔗</span>步骤三：分析关系（因果链）</div>
+            <div class="causal-chain" id="causalChain"></div>
+            <div class="gang-mu" id="gangMu">
+                <div class="gang-mu-label">纲 - 目 结构</div>
+                <div class="gang-mu-text" id="gangMuText"></div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">🎯</span>步骤四：确定证型</div>
+            <div id="syndromeResults"></div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">💊</span>步骤五：指导治疗</div>
+            <div id="treatmentResults"></div>
+        </div>
+
+        <div class="disclaimer">
+            ⚠️ 本诊断结果仅供参考，请结合临床实际综合判断。如有不适，请及时就医。
+        </div>
+    </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+let syndromesData = [];
+const QUICK_SYMPTOMS = [
+    "发热","恶寒","无汗","头痛","身痛","咳嗽","气喘","痰多","痰白","痰黄",
+    "胸闷","气短","心悸","失眠","口苦","咽干","咽痛","口渴","恶心","呕吐",
+    "嗳气","腹胀","腹痛","腹泻","便秘","尿黄","浮肿","腰酸","腰痛",
+    "头晕","耳鸣","乏力","自汗","盗汗","五心烦热","畏寒","肢冷",
+    "舌红","舌淡","苔白","苔黄","苔腻","脉浮","脉沉","脉弦","脉滑","脉数"
+];
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+    loadQuickTags();
+    loadSyndromes();
+});
+
+function loadQuickTags() {
+    const container = document.getElementById('quickTags');
+    QUICK_SYMPTOMS.forEach(s => {
+        const tag = document.createElement('span');
+        tag.className = 'quick-tag';
+        tag.textContent = s;
+        tag.onclick = () => {
+            tag.classList.toggle('active');
+            const ta = document.getElementById('symptoms');
+            if (tag.classList.contains('active')) {
+                ta.value = ta.value ? ta.value + '，' + s : s;
+            }
+        };
+        container.appendChild(tag);
+    });
+}
+
+async function loadSyndromes() {
+    try {
+        const resp = await fetch('data.json');
+        syndromesData = await resp.json();
+        console.log('Loaded', syndromesData.length, 'syndromes');
+    } catch(e) {
+        console.error('Failed to load data:', e);
+    }
+}
+
+// ===================== DIAGNOSIS =====================
+function diagnose() {
+    const symptomsText = document.getElementById('symptoms').value.trim();
+    const tongueText = document.getElementById('tongue').value.trim();
+    const pulseText = document.getElementById('pulse').value.trim();
+
+    if (!symptomsText) {
+        alert('请输入症状描述');
+        return;
+    }
+
+    const fullText = [symptomsText, tongueText, pulseText].filter(Boolean).join('，');
+    const symptomsList = symptomsText.split(/[,，、\s]+/).filter(Boolean);
+
+    // Step 1: Display collected symptoms
+    renderCollectedSymptoms(symptomsList, tongueText, pulseText);
+
+    // Step 2: Calculate dimension scores
+    const wuqiScores = calcWuqiScores(fullText, symptomsList);
+    const zangfuScores = calcZangfuScores(fullText, symptomsList);
+    const xieliuScores = calcXieliuScores(fullText, symptomsList);
+
+    renderDimensionScores('wuqiDims', 'wuqiMechanism', wuqiScores, 'wuqi');
+    renderDimensionScores('zangfuDims', 'zangfuMechanism', zangfuScores, 'zangfu');
+    renderDimensionScores('xieliuDims', 'xieliuMechanism', xieliuScores, 'xieliu');
+
+    // Step 3: Causal chain
+    const causal = buildCausalChain(wuqiScores, zangfuScores, xieliuScores);
+    renderCausalChain(causal);
+
+    // Step 4: Match syndromes
+    const results = matchSyndromes(symptomsList, fullText, wuqiScores, zangfuScores, xieliuScores);
+    renderSyndromeResults(results);
+
+    // Step 5: Treatment
+    renderTreatment(results);
+
+    // Show results
+    document.getElementById('results').classList.remove('hidden');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===================== SCORING =====================
+function calcWuqiScores(fullText, symptoms) {
+    const rules = {
+        '风': ['恶风','头痛','游走','风疹','痒','抽搐','项强'],
+        '寒': ['恶寒','无汗','冷痛','怕冷','畏寒','肢冷','得温则减','四肢厥冷'],
+        '热': ['发热','口苦','咽红','咽痛','舌红','苔黄','烦躁','心烦','尿黄','面赤','灼痛','红肿'],
+        '湿': ['胸闷','身重','困重','苔腻','便溏','浮肿','沉重','阴雨','肿胀','纳差'],
+        '燥': ['咽干','口干','干咳','鼻燥','皮肤干燥','便结','少痰']
+    };
+    const scores = {};
+    for (const [factor, keywords] of Object.entries(rules)) {
+        let score = 0;
+        keywords.forEach(kw => { if (fullText.includes(kw)) score += 0.15; });
+        if (score > 1) score = 1;
+        if (score > 0) scores[factor] = Math.round(score * 100);
+    }
+    return scores;
+}
+
+function calcZangfuScores(fullText, symptoms) {
+    const rules = {
+        '肝': ['头痛','胁','郁','怒','筋','抽','眩晕','目赤','口苦'],
+        '心': ['心悸','失眠','心烦','舌痛','胸痹','怔忡'],
+        '脾': ['腹胀','纳差','便溏','乏力','困倦','食少','浮肿','肌肉'],
+        '肺': ['咳嗽','气喘','胸闷','痰','咽痛','鼻塞','汗出','喘'],
+        '肾': ['腰','膝','耳鸣','头晕','尿频','夜尿','遗精','阳萎','骨'],
+        '胃': ['胃脘','恶心','呕吐','嗳气','吞酸','口臭','食少','脘腹'],
+        '胆': ['口苦','咽干','目眩','黄疸','胁痛'],
+        '大肠': ['便秘','便难','腹胀','泻痢'],
+        '膀胱': ['尿频','尿急','尿黄','小便不利']
+    };
+    const scores = {};
+    for (const [organ, keywords] of Object.entries(rules)) {
+        let score = 0;
+        keywords.forEach(kw => { if (fullText.includes(kw)) score += 0.12; });
+        if (score > 1) score = 1;
+        if (score > 0) scores[organ] = Math.round(score * 100);
+    }
+    return scores;
+}
+
+function calcXieliuScores(fullText, symptoms) {
+    const rules = {
+        '痰': ['痰','黏','腻','胸闷','呕恶','胖','苔腻','脉滑'],
+        '瘀血': ['刺痛','固定','夜间','紫暗','瘀','舌紫','痛有定处','麻木'],
+        '水饮': ['水肿','浮肿','水泻','小便不利','心下','悸','喘','泡沫痰'],
+        '食积': ['腹胀','嗳腐','酸腐','厌食','饱嗳','呕恶','苔厚','便秘'],
+        '湿浊': ['困重','苔腻','身重','头重','纳呆','脘闷']
+    };
+    const scores = {};
+    for (const [factor, keywords] of Object.entries(rules)) {
+        let score = 0;
+        keywords.forEach(kw => { if (fullText.includes(kw)) score += 0.15; });
+        if (score > 1) score = 1;
+        if (score > 0) scores[factor] = Math.round(score * 100);
+    }
+    return scores;
+}
+
+// ===================== CAUSAL CHAIN =====================
+function buildCausalChain(wuqi, zangfu, xieliu) {
+    const topWuqi = Object.entries(wuqi).sort((a,b) => b[1]-a[1]);
+    const topZangfu = Object.entries(zangfu).sort((a,b) => b[1]-a[1]);
+    const topXieliu = Object.entries(xieliu).sort((a,b) => b[1]-a[1]);
+
+    const chain = [];
+    const hasWuqi = topWuqi.length > 0 && topWuqi[0][1] >= 60;
+    const hasXieliu = topXieliu.length > 0 && topXieliu[0][1] >= 40;
+
+    if (hasWuqi && !hasXieliu) {
+        chain.push({ text: `外感${topWuqi[0][0]}邪侵袭肌表`, arrow: '→' });
+        chain.push({ text: '卫阳被郁，正邪相争于表', arrow: '→' });
+        chain.push({ text: `${topZangfu.length > 0 ? topZangfu[0][0] : '表'}受邪，出现表证`, arrow: '' });
+    } else if (hasWuqi && hasXieliu) {
+        chain.push({ text: `${topWuqi[0][0]}邪迁延不愈`, arrow: '→' });
+        chain.push({ text: `${topZangfu.length > 0 ? topZangfu[0][0] : '脏腑'}功能失调，津液代谢障碍`, arrow: '→' });
+        chain.push({ text: `形成${topXieliu[0][0]}等病理产物`, arrow: '' });
+    } else {
+        chain.push({ text: `${topZangfu.length > 0 ? topZangfu[0][0] : '脏腑'}功能失调`, arrow: '→' });
+        if (hasXieliu) {
+            chain.push({ text: `气血运行不畅`, arrow: '→' });
+            chain.push({ text: `形成${topXieliu[0][0]}`, arrow: '' });
+        } else {
+            chain.push({ text: '气机升降失常', arrow: '' });
+        }
+    }
+
+    // Gang-Mu structure
+    let gang = '', mu = '';
+    if (hasWuqi && topWuqi[0][1] >= topXieliu[0]?.[1] + 10) {
+        gang = `五气-${topWuqi[0][0]}`;
+    } else if (hasXieliu) {
+        gang = `邪留-${topXieliu[0][0]}`;
+    } else if (topZangfu.length > 0) {
+        gang = `脏腑-${topZangfu[0][0]}`;
+    }
+
+    const muList = [];
+    topZangfu.slice(0,2).forEach(([o]) => { if (!gang.includes(o)) muList.push(`脏腑-${o}`); });
+    if (hasWuqi && !gang.includes(topWuqi[0][0])) muList.push(`五气-${topWuqi[0][0]}`);
+    if (hasXieliu && !gang.includes(topXieliu[0][0])) muList.push(`邪留-${topXieliu[0][0]}`);
+    mu = muList.slice(0,2).join('，');
+
+    let gangMuText = gang ? `以「${gang}」为纲` : '';
+    if (mu) gangMuText += `，以「${mu}」为目`;
+
+    return { chain, gangMuText, gang, mu };
+}
+
+// ===================== MATCH =====================
+function matchSyndromes(symptoms, fullText, wuqi, zangfu, xieliu) {
+    const results = [];
+
+    syndromesData.forEach(s => {
+        const allCriteria = [...(s.primary || []), ...(s.secondary || []), ...(s.tongue || []), ...(s.pulse || [])];
+        let matched = [];
+        let matchedPrimary = [];
+        let matchedSecondary = [];
+
+        (s.primary || []).forEach(sym => { if (fullText.includes(sym)) { matched.push(sym); matchedPrimary.push(sym); } });
+        (s.secondary || []).forEach(sym => { if (fullText.includes(sym)) { matched.push(sym); matchedSecondary.push(sym); } });
+        (s.tongue || []).forEach(sym => { if (fullText.includes(sym)) matched.push(sym); });
+        (s.pulse || []).forEach(sym => { if (fullText.includes(sym)) matched.push(sym); });
+
+        if (matched.length === 0) return;
+
+        // Score calculation
+        const primaryScore = matchedPrimary.length / Math.max((s.primary || []).length, 1);
+        const secondaryScore = matchedSecondary.length / Math.max((s.secondary || []).length, 1) * 0.6;
+        const totalSymptoms = (s.primary || []).length + (s.secondary || []).length;
+        const matchRate = matched.length / Math.max(totalSymptoms, 1);
+
+        // Dimension match bonus
+        let dimBonus = 0;
+        (s.wuqi || []).forEach(w => { if (wuqi[w]) dimBonus += 0.1; });
+        (s.zangfu || []).forEach(z => { if (zangfu[z]) dimBonus += 0.1; });
+        (s.xieliu || []).forEach(x => { if (xieliu[x]) dimBonus += 0.1; });
+
+        const confidence = Math.min(98, Math.round((primaryScore * 0.5 + secondaryScore * 0.3 + matchRate * 0.2 + dimBonus) * 100));
+
+        if (confidence >= 15) {
+            results.push({
+                id: s.id,
+                name: s.name,
+                category: s.category,
+                confidence,
+                matchedPrimary,
+                matchedSecondary,
+                matched,
+                formulas: s.formulas || [],
+                wuqi: s.wuqi || [],
+                zangfu: s.zangfu || [],
+                xieliu: s.xieliu || [],
+                desc: s.desc || ''
+            });
+        }
+    });
+
+    return results.sort((a, b) => b.confidence - a.confidence).slice(0, 5);
+}
+
+// ===================== RENDER =====================
+function renderCollectedSymptoms(symptoms, tongue, pulse) {
+    const container = document.getElementById('collectedSymptoms');
+    let html = '';
+    symptoms.forEach(s => {
+        html += `<span class="result-tag primary">${s}</span>`;
+    });
+    if (tongue) html += `<span class="result-tag secondary">舌象：${tongue}</span>`;
+    if (pulse) html += `<span class="result-tag secondary">脉象：${pulse}</span>`;
+    container.innerHTML = html;
+}
+
+function renderDimensionScores(dimId, mechId, scores, type) {
+    const dimContainer = document.getElementById(dimId);
+    const mechContainer = document.getElementById(mechId);
+
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    let html = '';
+    sorted.forEach(([name, score]) => {
+        const pct = Math.max(8, score);
+        html += `
+        <div class="dim-item">
+            <div class="dim-label">${name}</div>
+            <div class="dim-bar-bg">
+                <div class="dim-bar bar-${type}" style="width:${pct}%">${score >= 60 ? name : ''}</div>
+            </div>
+            <div class="dim-score">${score}%</div>
+        </div>`;
+    });
+    dimContainer.innerHTML = html || '<div style="color:#aaa;font-size:13px;">无显著表现</div>';
+
+    // Mechanism summary
+    const mechanisms = {
+        wuqi: { '风': '风邪侵袭，善行数变', '寒': '寒邪凝滞，收引作痛', '热': '热邪蕴结，耗津伤液', '湿': '湿邪困阻，黏腻难祛', '燥': '燥邪伤津，干涩失润' },
+        zangfu: { '肝': '肝主疏泄，调畅气机', '心': '心主血脉，神明之主', '脾': '脾主运化，后天之本', '肺': '肺主气，司呼吸，主宣降', '肾': '肾主骨生髓，先天之本', '胃': '胃主受纳，以降为和', '胆': '胆附于肝，贮藏排泄胆汁', '大肠': '大肠主传导', '膀胱': '膀胱为州都之官' },
+        xieliu: { '痰': '痰湿黏腻，阻滞气机', '瘀血': '瘀血阻络，不通则痛', '水饮': '水饮停聚，泛溢肌肤', '食积': '食滞中焦，气机不畅', '湿浊': '湿浊内生，困遏脾阳' }
+    };
+
+    if (sorted.length > 0) {
+        let mechText = sorted.map(([name, score]) => `${name}（${mechanisms[type]?.[name] || ''}）`).join('；');
+        mechContainer.textContent = '病机：' + mechText;
+    } else {
+        mechContainer.textContent = '';
+    }
+}
+
+function renderCausalChain(causal) {
+    const container = document.getElementById('causalChain');
+    let html = '';
+    causal.chain.forEach((step, i) => {
+        html += `
+        <div class="causal-step">
+            <div class="causal-arrow">${step.arrow || '→'}</div>
+            <div class="causal-text">${i + 1}. ${step.text}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+
+    document.getElementById('gangMuText').textContent = causal.gangMuText || '待分析';
+}
+
+function renderSyndromeResults(results) {
+    const container = document.getElementById('syndromeResults');
+    if (results.length === 0) {
+        container.innerHTML = '<p style="color:#aaa;">未匹配到明确的证候，请提供更详细的症状描述。</p>';
+        return;
+    }
+
+    const categoryMap = {
+        '五气为病': 'badge-wuqi',
+        '脏腑主病': 'badge-zangfu',
+        '邪留发病': 'badge-xieliu'
+    };
+
+    let html = '';
+    results.forEach((r, i) => {
+        const badgeClass = categoryMap[r.category] || 'badge-wuqi';
+        html += `
+        <div class="result-card" ${i === 0 ? 'style="border-left-width:6px;"' : ''}>
+            <div class="result-header">
+                <div>
+                    <div class="result-name">${i === 0 ? '🥇 ' : ''}${r.name}</div>
+                </div>
+                <span class="result-badge ${badgeClass}">${r.category}</span>
+            </div>
+            <div class="result-confidence">置信度 ${r.confidence}%</div>
+            <div class="confidence-bar"><div class="confidence-fill" style="width:${r.confidence}%"></div></div>
+            ${r.matchedPrimary.length > 0 ? `
+            <div style="font-size:13px;color:#888;margin-bottom:6px;">主症匹配：</div>
+            <div class="result-symptoms">${r.matchedPrimary.map(s => `<span class="result-tag primary">${s}</span>`).join('')}</div>` : ''}
+            ${r.matchedSecondary.length > 0 ? `
+            <div style="font-size:13px;color:#888;margin-bottom:6px;">次症匹配：</div>
+            <div class="result-symptoms">${r.matchedSecondary.map(s => `<span class="result-tag secondary">${s}</span>`).join('')}</div>` : ''}
+            ${r.desc ? `<div style="font-size:13px;color:#888;margin-top:8px;line-height:1.8;">辨证标准：${r.desc}</div>` : ''}
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function renderTreatment(results) {
+    const container = document.getElementById('treatmentResults');
+    if (results.length === 0) {
+        container.innerHTML = '<p style="color:#aaa;">暂无方药建议。</p>';
+        return;
+    }
+
+    const r = results[0];
+    let html = '';
+
+    // Treatment strategy
+    const causal = buildCausalChain({}, {}, {});
+    const strategyParts = [];
+    if (r.category === '五气为病') {
+        strategyParts.push(`主治：祛除${r.wuqi.join('、')}邪（治五气）`);
+    } else if (r.category === '脏腑主病') {
+        strategyParts.push(`主治：调理${r.zangfu.join('、')}功能（治脏腑）`);
+    } else {
+        strategyParts.push(`主治：祛除${r.xieliu.join('、')}（治邪留）`);
+    }
+
+    if (r.formulas.length > 0) {
+        html += `<div class="result-formula">
+            <strong>▶ ${r.formulas.join(' / ')}</strong>
+            ${strategyParts.length > 0 ? `<div style="margin-top:6px;font-size:13px;color:#666;">${strategyParts.join('；')}</div>` : ''}
+        </div>`;
+    }
+
+    // Other syndromes
+    if (results.length > 1) {
+        html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee;">';
+        html += '<div style="font-size:14px;font-weight:600;margin-bottom:10px;">其他可能证候：</div>';
+        results.slice(1).forEach(r => {
+            const categoryMap = { '五气为病': 'badge-wuqi', '脏腑主病': 'badge-zangfu', '邪留发病': 'badge-xieliu' };
+            html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span class="result-badge ${categoryMap[r.category] || ''}" style="font-size:11px;">${r.category}</span>
+                <span style="font-size:14px;font-weight:600;">${r.name}</span>
+                <span style="font-size:12px;color:#aaa;">${r.confidence}%</span>
+                ${r.formulas.length > 0 ? `<span style="font-size:12px;color:var(--primary);">→ ${r.formulas[0]}</span>` : ''}
+            </div>`;
+        });
+        html += '</div>';
+    }
+
+    container.innerHTML = html;
+}
+</script>
+</body>
+</html>

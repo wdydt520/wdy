@@ -1,0 +1,1985 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "中医三型辨证症状数据库",
+    "categories": [
+      "全身症状",
+      "头面症状",
+      "胸腹症状",
+      "四肢症状",
+      "二便症状",
+      "舌象",
+      "脉象"
+    ]
+  },
+  "symptoms": {
+    "S001": {
+      "name": "发热",
+      "aliases": [
+        "发烧",
+        "身热",
+        "体温升高"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.7,
+            "description": "风邪致病，发热伴恶风"
+          },
+          "寒": {
+            "weight": 0.6,
+            "description": "寒邪郁而化热"
+          },
+          "暑": {
+            "weight": 0.8,
+            "description": "暑热之邪，壮热汗出"
+          },
+          "湿": {
+            "weight": 0.5,
+            "description": "湿热蕴蒸，身热不扬"
+          },
+          "燥": {
+            "weight": 0.3,
+            "description": "燥邪伤肺，可伴发热"
+          },
+          "火": {
+            "weight": 0.9,
+            "description": "火热之邪，高热烦渴"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.7,
+            "description": "肺卫受邪，发热恶寒"
+          },
+          "心": {
+            "weight": 0.6,
+            "description": "心火亢盛，发热心烦"
+          },
+          "肝": {
+            "weight": 0.5,
+            "description": "肝火上炎，发热口苦"
+          },
+          "脾": {
+            "weight": 0.4,
+            "description": "脾虚发热，低热缠绵"
+          },
+          "肾": {
+            "weight": 0.3,
+            "description": "肾阴不足，潮热盗汗"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.4,
+            "description": "痰热内扰，发热胸闷"
+          },
+          "瘀": {
+            "weight": 0.3,
+            "description": "瘀血化热，入夜发热"
+          },
+          "食积": {
+            "weight": 0.5,
+            "description": "食积化热，发热腹胀"
+          }
+        }
+      },
+      "severity_levels": {
+        "轻度": "37.3-38°C",
+        "中度": "38.1-39°C",
+        "重度": "39.1°C以上"
+      }
+    },
+    "S002": {
+      "name": "恶寒",
+      "aliases": [
+        "怕冷",
+        "畏寒",
+        "恶风寒"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.8,
+            "description": "风邪袭表，恶风汗出"
+          },
+          "寒": {
+            "weight": 0.95,
+            "description": "寒邪束表，恶寒无汗"
+          },
+          "暑": {
+            "weight": 0.2,
+            "description": "暑湿伤表，可伴恶寒"
+          },
+          "湿": {
+            "weight": 0.5,
+            "description": "湿邪困表，恶寒身重"
+          },
+          "燥": {
+            "weight": 0.3,
+            "description": "燥邪伤表，微恶风寒"
+          },
+          "火": {
+            "weight": 0.1,
+            "description": "热盛伤津，罕见恶寒"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.8,
+            "description": "肺卫不固，恶风自汗"
+          },
+          "心": {
+            "weight": 0.2,
+            "description": "心阳不足，畏寒肢冷"
+          },
+          "脾": {
+            "weight": 0.4,
+            "description": "脾阳不振，畏寒喜暖"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾阳虚衰，畏寒肢冷"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.2,
+            "description": "痰饮内停，背恶寒"
+          },
+          "水": {
+            "weight": 0.3,
+            "description": "水饮内停，心下悸而恶寒"
+          }
+        }
+      }
+    },
+    "S003": {
+      "name": "头痛",
+      "aliases": [
+        "头疼",
+        "头风",
+        "偏头痛"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.9,
+            "description": "风邪上扰，头痛游走"
+          },
+          "寒": {
+            "weight": 0.8,
+            "description": "寒凝经脉，头痛剧烈"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热上蒸，头胀痛"
+          },
+          "湿": {
+            "weight": 0.7,
+            "description": "湿浊上蒙，头痛如裹"
+          },
+          "燥": {
+            "weight": 0.4,
+            "description": "燥邪伤肺，头痛咽干"
+          },
+          "火": {
+            "weight": 0.7,
+            "description": "火热上炎，头胀灼痛"
+          }
+        },
+        "zangfu": {
+          "肝": {
+            "weight": 0.8,
+            "description": "肝阳上亢，头胀痛眩晕"
+          },
+          "心": {
+            "weight": 0.5,
+            "description": "心血不足，头痛心悸"
+          },
+          "脾": {
+            "weight": 0.6,
+            "description": "脾虚气陷，头痛绵绵"
+          },
+          "肾": {
+            "weight": 0.7,
+            "description": "肾精亏虚，头痛空痛"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.6,
+            "description": "痰浊上扰，头痛昏蒙"
+          },
+          "瘀": {
+            "weight": 0.7,
+            "description": "瘀阻脑络，头痛如刺"
+          }
+        }
+      },
+      "location_mapping": {
+        "前额痛": "阳明经",
+        "侧头痛": "少阳经",
+        "后头痛": "太阳经",
+        "巅顶痛": "厥阴经"
+      }
+    },
+    "S004": {
+      "name": "咳嗽",
+      "aliases": [
+        "咳",
+        "咳嗽气喘",
+        "咳逆"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.85,
+            "description": "风邪犯肺，咳嗽咽痒"
+          },
+          "寒": {
+            "weight": 0.8,
+            "description": "寒邪束肺，咳嗽痰白"
+          },
+          "暑": {
+            "weight": 0.4,
+            "description": "暑湿伤肺，咳嗽胸闷"
+          },
+          "湿": {
+            "weight": 0.6,
+            "description": "湿痰犯肺，咳嗽痰多"
+          },
+          "燥": {
+            "weight": 0.9,
+            "description": "燥邪伤肺，干咳无痰"
+          },
+          "火": {
+            "weight": 0.7,
+            "description": "火热灼肺，咳痰黄稠"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.95,
+            "description": "肺失宣降，咳嗽气逆"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "脾虚生痰，痰湿咳嗽"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝火犯肺，气逆咳嗽"
+          },
+          "肾": {
+            "weight": 0.6,
+            "description": "肾不纳气，咳嗽气喘"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.8,
+            "description": "痰浊阻肺，咳嗽痰多"
+          },
+          "饮": {
+            "weight": 0.6,
+            "description": "饮停胸胁，咳嗽引痛"
+          },
+          "瘀": {
+            "weight": 0.3,
+            "description": "瘀阻肺络，咳嗽咯血"
+          }
+        }
+      },
+      "cough_types": {
+        "干咳": "燥邪伤肺或阴虚肺燥",
+        "痰咳": "痰湿或痰热阻肺",
+        "顿咳": "风邪或百日咳",
+        "久咳": "肺肾阴虚或肺脾气虚"
+      }
+    },
+    "S005": {
+      "name": "痰白",
+      "aliases": [
+        "咳痰色白",
+        "白痰",
+        "痰稀白"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.85,
+            "description": "寒邪伤肺，痰白清稀"
+          },
+          "湿": {
+            "weight": 0.7,
+            "description": "湿邪困脾，痰白量多"
+          },
+          "风": {
+            "weight": 0.5,
+            "description": "风寒犯肺，痰白泡沫"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.8,
+            "description": "肺寒停饮，痰白清稀"
+          },
+          "脾": {
+            "weight": 0.7,
+            "description": "脾虚生痰，痰白量多"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.9,
+            "description": "痰浊内蕴，痰白黏稠"
+          },
+          "饮": {
+            "weight": 0.7,
+            "description": "寒饮内停，痰白清稀如水"
+          }
+        }
+      }
+    },
+    "S006": {
+      "name": "痰黄",
+      "aliases": [
+        "咳痰色黄",
+        "黄痰",
+        "痰黄稠"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.85,
+            "description": "火热灼肺，痰黄稠结"
+          },
+          "暑": {
+            "weight": 0.5,
+            "description": "暑热犯肺，痰黄黏稠"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.8,
+            "description": "痰热壅肺，痰黄稠"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝火犯肺，痰黄难咯"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.9,
+            "description": "痰热蕴肺，痰黄稠难咯"
+          }
+        }
+      }
+    },
+    "S007": {
+      "name": "口渴",
+      "aliases": [
+        "渴",
+        "烦渴",
+        "口干渴"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "暑": {
+            "weight": 0.8,
+            "description": "暑热伤津，口渴多饮"
+          },
+          "燥": {
+            "weight": 0.7,
+            "description": "燥邪伤津，口干咽燥"
+          },
+          "火": {
+            "weight": 0.85,
+            "description": "火热伤津，烦渴引饮"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.5,
+            "description": "肺燥津伤，口干咽燥"
+          },
+          "胃": {
+            "weight": 0.7,
+            "description": "胃热津伤，口渴喜冷饮"
+          },
+          "肾": {
+            "weight": 0.6,
+            "description": "肾阴不足，口干咽燥"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.3,
+            "description": "瘀血内阻，但欲漱水不欲咽"
+          }
+        }
+      },
+      "thirst_types": {
+        "口渴喜冷饮": "实热证",
+        "口渴喜热饮": "虚寒证或痰饮内停",
+        "口渴不多饮": "阴虚或湿热",
+        "但欲漱水不欲咽": "瘀血内阻"
+      }
+    },
+    "S008": {
+      "name": "汗出",
+      "aliases": [
+        "出汗",
+        "自汗",
+        "盗汗"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.7,
+            "description": "风邪伤表，汗出恶风"
+          },
+          "暑": {
+            "weight": 0.85,
+            "description": "暑热熏蒸，汗多壮热"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.6,
+            "description": "肺卫不固，自汗恶风"
+          },
+          "心": {
+            "weight": 0.5,
+            "description": "心气不足，动则汗出"
+          },
+          "肾": {
+            "weight": 0.6,
+            "description": "肾阴不足，盗汗潮热"
+          }
+        }
+      },
+      "sweat_types": {
+        "自汗": "气虚或阳虚",
+        "盗汗": "阴虚",
+        "大汗": "实热或亡阳",
+        "战汗": "正邪相争",
+        "头汗": "上焦热盛或中焦湿热"
+      }
+    },
+    "S009": {
+      "name": "无汗",
+      "aliases": [
+        "不出汗",
+        "汗闭"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.9,
+            "description": "寒邪束表，腠理闭塞无汗"
+          },
+          "燥": {
+            "weight": 0.4,
+            "description": "燥邪伤表，皮肤干燥无汗"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.7,
+            "description": "风寒束肺，无汗而喘"
+          }
+        }
+      }
+    },
+    "S010": {
+      "name": "肢体酸痛",
+      "aliases": [
+        "身痛",
+        "身体酸痛",
+        "周身疼痛"
+      ],
+      "category": "四肢症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.7,
+            "description": "风邪袭表，游走性疼痛"
+          },
+          "寒": {
+            "weight": 0.8,
+            "description": "寒凝经脉，疼痛剧烈"
+          },
+          "湿": {
+            "weight": 0.85,
+            "description": "湿邪困阻，酸痛沉重"
+          },
+          "暑": {
+            "weight": 0.4,
+            "description": "暑湿困表，肢体困重"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.5,
+            "description": "脾虚湿困，肢体困重"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝血不足，筋脉失养"
+          },
+          "肾": {
+            "weight": 0.4,
+            "description": "肾虚骨弱，腰膝酸痛"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血阻络，刺痛固定"
+          }
+        }
+      }
+    },
+    "S011": {
+      "name": "胸闷",
+      "aliases": [
+        "胸痞",
+        "胸脘痞闷",
+        "胸部憋闷"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "暑": {
+            "weight": 0.6,
+            "description": "暑湿郁遏，胸闷不舒"
+          },
+          "湿": {
+            "weight": 0.7,
+            "description": "湿邪困脾，胸闷纳呆"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.6,
+            "description": "肺气不宣，胸闷气短"
+          },
+          "心": {
+            "weight": 0.7,
+            "description": "心脉痹阻，胸闷心痛"
+          },
+          "肝": {
+            "weight": 0.6,
+            "description": "肝气郁结，胸闷太息"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.8,
+            "description": "痰浊内阻，胸闷痰多"
+          },
+          "饮": {
+            "weight": 0.7,
+            "description": "饮停胸胁，胸闷气喘"
+          },
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血内阻，胸闷刺痛"
+          }
+        }
+      }
+    },
+    "S012": {
+      "name": "恶心呕吐",
+      "aliases": [
+        "恶心",
+        "呕吐",
+        "呕逆",
+        "干呕"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "暑": {
+            "weight": 0.7,
+            "description": "暑湿犯胃，恶心呕吐"
+          },
+          "湿": {
+            "weight": 0.75,
+            "description": "湿浊困脾，恶心纳呆"
+          }
+        },
+        "zangfu": {
+          "胃": {
+            "weight": 0.85,
+            "description": "胃气上逆，恶心呕吐"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "脾虚不运，恶心纳呆"
+          },
+          "肝": {
+            "weight": 0.6,
+            "description": "肝气犯胃，恶心呕吐"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.6,
+            "description": "痰浊中阻，恶心呕吐"
+          },
+          "食积": {
+            "weight": 0.8,
+            "description": "食积停滞，呕吐酸腐"
+          }
+        }
+      }
+    },
+    "S013": {
+      "name": "腹痛",
+      "aliases": [
+        "腹部疼痛",
+        "腹痛腹胀",
+        "脘腹痛"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.8,
+            "description": "寒凝腹痛，疼痛剧烈喜温"
+          },
+          "湿": {
+            "weight": 0.5,
+            "description": "湿困脾土，腹胀隐痛"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.6,
+            "description": "脾虚失养，腹痛绵绵"
+          },
+          "胃": {
+            "weight": 0.7,
+            "description": "胃失和降，脘腹胀痛"
+          },
+          "肝": {
+            "weight": 0.65,
+            "description": "肝气郁滞，腹痛走窜"
+          },
+          "大肠": {
+            "weight": 0.5,
+            "description": "肠道传导失常，腹痛"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.6,
+            "description": "瘀血内阻，腹痛如刺"
+          },
+          "食积": {
+            "weight": 0.7,
+            "description": "食积停滞，腹痛拒按"
+          }
+        }
+      },
+      "pain_types": {
+        "胀痛": "气滞",
+        "刺痛": "瘀血",
+        "冷痛": "寒证",
+        "灼痛": "热证",
+        "隐痛": "虚证",
+        "绞痛": "实证或虫积"
+      }
+    },
+    "S014": {
+      "name": "腹泻",
+      "aliases": [
+        "泄泻",
+        "大便溏泄",
+        "拉肚子"
+      ],
+      "category": "二便症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.7,
+            "description": "寒湿伤脾，腹泻清稀"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑湿伤脾，腹泻秽浊"
+          },
+          "湿": {
+            "weight": 0.85,
+            "description": "湿邪困脾，腹泻便溏"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.8,
+            "description": "脾虚不运，腹泻便溏"
+          },
+          "大肠": {
+            "weight": 0.6,
+            "description": "大肠传导失司，腹泻"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾阳不足，五更泄泻"
+          }
+        },
+        "xieliu": {
+          "食积": {
+            "weight": 0.7,
+            "description": "食积不化，腹泻酸腐"
+          }
+        }
+      }
+    },
+    "S015": {
+      "name": "便秘",
+      "aliases": [
+        "大便干结",
+        "大便难",
+        "大便不通"
+      ],
+      "category": "二便症状",
+      "dimensions": {
+        "wuqi": {
+          "燥": {
+            "weight": 0.7,
+            "description": "燥邪伤津，大便干结"
+          }
+        },
+        "zangfu": {
+          "大肠": {
+            "weight": 0.8,
+            "description": "大肠传导失常，便秘"
+          },
+          "肺": {
+            "weight": 0.4,
+            "description": "肺与大肠相表里，肺燥便秘"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "脾虚运化无力，便秘"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝郁气滞，便秘腹胀"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾阳不足，冷秘"
+          }
+        }
+      }
+    },
+    "S016": {
+      "name": "小便短赤",
+      "aliases": [
+        "尿黄",
+        "尿少色黄",
+        "小便黄赤"
+      ],
+      "category": "二便症状",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.8,
+            "description": "火热伤津，小便短赤"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热伤津，小便短赤"
+          }
+        },
+        "zangfu": {
+          "心": {
+            "weight": 0.7,
+            "description": "心火下移小肠，小便赤涩"
+          },
+          "膀胱": {
+            "weight": 0.7,
+            "description": "膀胱湿热，小便短赤"
+          },
+          "肾": {
+            "weight": 0.4,
+            "description": "肾阴不足，小便短赤"
+          }
+        },
+        "xieliu": {
+          "湿": {
+            "weight": 0.6,
+            "description": "湿热下注，小便短赤"
+          }
+        }
+      }
+    },
+    "S017": {
+      "name": "舌淡红",
+      "aliases": [
+        "舌色淡红",
+        "淡红舌"
+      ],
+      "category": "舌象",
+      "dimensions": {
+        "zangfu": {
+          "心": {
+            "weight": 0.5,
+            "description": "正常舌象或气血轻度不足"
+          },
+          "脾": {
+            "weight": 0.4,
+            "description": "脾虚气血不足"
+          }
+        }
+      },
+      "clinical_significance": "正常舌象，或见于轻症、虚证初起"
+    },
+    "S018": {
+      "name": "舌淡",
+      "aliases": [
+        "舌色淡白",
+        "淡白舌",
+        "舌体淡"
+      ],
+      "category": "舌象",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.7,
+            "description": "寒凝血涩，舌淡"
+          }
+        },
+        "zangfu": {
+          "心": {
+            "weight": 0.6,
+            "description": "心血不足，舌淡"
+          },
+          "脾": {
+            "weight": 0.7,
+            "description": "脾虚气血两虚，舌淡嫩"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾阳不足，舌淡胖"
+          }
+        }
+      },
+      "clinical_significance": "主虚证、寒证"
+    },
+    "S019": {
+      "name": "舌红",
+      "aliases": [
+        "舌色红",
+        "红舌",
+        "舌质红"
+      ],
+      "category": "舌象",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.85,
+            "description": "火热上炎，舌红"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热伤津，舌红"
+          }
+        },
+        "zangfu": {
+          "心": {
+            "weight": 0.75,
+            "description": "心火亢盛，舌尖红赤"
+          },
+          "肝": {
+            "weight": 0.65,
+            "description": "肝火亢盛，舌边红"
+          },
+          "胃": {
+            "weight": 0.6,
+            "description": "胃热炽盛，舌红苔黄"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾阴不足，舌红少苔"
+          }
+        }
+      },
+      "clinical_significance": "主热证"
+    },
+    "S020": {
+      "name": "舌苔白",
+      "aliases": [
+        "苔白",
+        "白苔",
+        "舌上白苔"
+      ],
+      "category": "舌象",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.8,
+            "description": "寒邪束表，苔白"
+          },
+          "风": {
+            "weight": 0.6,
+            "description": "风寒犯表，苔薄白"
+          },
+          "湿": {
+            "weight": 0.65,
+            "description": "湿邪困脾，苔白腻"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.6,
+            "description": "风寒犯肺，苔薄白"
+          },
+          "脾": {
+            "weight": 0.55,
+            "description": "脾虚湿盛，苔白腻"
+          }
+        }
+      },
+      "coat_types": {
+        "薄白苔": "正常或表证初起",
+        "厚白苔": "湿浊内停或痰饮内阻",
+        "白腻苔": "湿浊痰饮内停",
+        "白滑苔": "寒湿或痰饮内停"
+      }
+    },
+    "S021": {
+      "name": "舌苔黄",
+      "aliases": [
+        "苔黄",
+        "黄苔",
+        "舌上黄苔"
+      ],
+      "category": "舌象",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.85,
+            "description": "火热熏蒸，苔黄"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热熏蒸，苔黄腻"
+          }
+        },
+        "zangfu": {
+          "胃": {
+            "weight": 0.75,
+            "description": "胃热炽盛，苔黄厚"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "脾蕴湿热，苔黄腻"
+          },
+          "大肠": {
+            "weight": 0.5,
+            "description": "大肠湿热，苔黄腻"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.6,
+            "description": "痰热内蕴，苔黄腻"
+          },
+          "食积": {
+            "weight": 0.65,
+            "description": "食积化热，苔黄厚腻"
+          }
+        }
+      },
+      "clinical_significance": "主热证、里证"
+    },
+    "S022": {
+      "name": "脉浮",
+      "aliases": [
+        "浮脉",
+        "脉象浮"
+      ],
+      "category": "脉象",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.85,
+            "description": "风邪袭表，脉浮"
+          },
+          "寒": {
+            "weight": 0.7,
+            "description": "风寒束表，脉浮紧"
+          },
+          "暑": {
+            "weight": 0.4,
+            "description": "暑湿伤表，脉浮濡"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.75,
+            "description": "肺卫受邪，脉浮"
+          }
+        }
+      },
+      "clinical_significance": "主表证，或虚阳外越"
+    },
+    "S023": {
+      "name": "脉紧",
+      "aliases": [
+        "紧脉",
+        "脉象紧"
+      ],
+      "category": "脉象",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.9,
+            "description": "寒邪收引，脉紧"
+          }
+        }
+      },
+      "clinical_significance": "主寒证、痛证、宿食"
+    },
+    "S024": {
+      "name": "脉数",
+      "aliases": [
+        "数脉",
+        "脉象数",
+        "脉数有力"
+      ],
+      "category": "脉象",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.85,
+            "description": "火热内盛，脉数有力"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热熏蒸，脉数"
+          }
+        },
+        "zangfu": {
+          "心": {
+            "weight": 0.7,
+            "description": "心火亢盛，脉数"
+          },
+          "胃": {
+            "weight": 0.5,
+            "description": "胃热炽盛，脉滑数"
+          }
+        }
+      },
+      "pulse_types": {
+        "数而有力": "实热证",
+        "数而无力": "虚热证",
+        "细数": "阴虚火旺"
+      }
+    },
+    "S025": {
+      "name": "脉滑",
+      "aliases": [
+        "滑脉",
+        "脉象滑"
+      ],
+      "category": "脉象",
+      "dimensions": {
+        "xieliu": {
+          "痰": {
+            "weight": 0.85,
+            "description": "痰浊内蕴，脉滑"
+          },
+          "食积": {
+            "weight": 0.7,
+            "description": "食积停滞，脉滑有力"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.5,
+            "description": "脾虚生痰，脉滑"
+          }
+        }
+      },
+      "clinical_significance": "主痰饮、食积、实热，亦可见于正常孕妇"
+    },
+    "S026": {
+      "name": "脉弦",
+      "aliases": [
+        "弦脉",
+        "脉象弦"
+      ],
+      "category": "脉象",
+      "dimensions": {
+        "zangfu": {
+          "肝": {
+            "weight": 0.85,
+            "description": "肝气郁结，脉弦"
+          }
+        },
+        "wuqi": {
+          "寒": {
+            "weight": 0.5,
+            "description": "寒凝肝脉，脉弦紧"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.4,
+            "description": "痰饮内停，脉弦滑"
+          }
+        }
+      },
+      "clinical_significance": "主肝胆病、痛证、痰饮、疟疾"
+    },
+    "S027": {
+      "name": "咽喉肿痛",
+      "aliases": [
+        "咽痛",
+        "喉咙痛",
+        "咽喉疼痛"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.7,
+            "description": "风热犯肺，咽喉红肿疼痛"
+          },
+          "燥": {
+            "weight": 0.65,
+            "description": "燥邪伤肺，咽干咽痛"
+          },
+          "火": {
+            "weight": 0.8,
+            "description": "火热上炎，咽喉肿痛"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.75,
+            "description": "肺热或肺阴不足，咽喉不利"
+          },
+          "胃": {
+            "weight": 0.5,
+            "description": "胃火上炎，牙龈咽喉肿痛"
+          }
+        }
+      }
+    },
+    "S028": {
+      "name": "鼻塞流涕",
+      "aliases": [
+        "鼻塞",
+        "流涕",
+        "鼻流清涕",
+        "鼻流浊涕"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.8,
+            "description": "风寒犯肺，鼻塞流清涕"
+          },
+          "寒": {
+            "weight": 0.75,
+            "description": "寒邪束肺，鼻塞流清涕"
+          },
+          "火": {
+            "weight": 0.5,
+            "description": "风热犯肺，鼻流浊涕"
+          }
+        },
+        "zangfu": {
+          "肺": {
+            "weight": 0.85,
+            "description": "肺开窍于鼻，鼻塞流涕"
+          }
+        }
+      },
+      "discharge_types": {
+        "清涕": "风寒",
+        "浊涕黄稠": "风热或热毒",
+        "浊涕腥臭": "鼻渊，湿热或热毒"
+      }
+    },
+    "S029": {
+      "name": "气短",
+      "aliases": [
+        "短气",
+        "气短乏力",
+        "呼吸短促"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "zangfu": {
+          "肺": {
+            "weight": 0.8,
+            "description": "肺气不足，气短声低"
+          },
+          "心": {
+            "weight": 0.6,
+            "description": "心气虚，气短心悸"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "肾不纳气，气短喘息"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.4,
+            "description": "痰浊阻肺，气短胸闷"
+          }
+        }
+      }
+    },
+    "S030": {
+      "name": "乏力",
+      "aliases": [
+        "疲倦乏力",
+        "神疲乏力",
+        "四肢无力"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "zangfu": {
+          "脾": {
+            "weight": 0.85,
+            "description": "脾虚气弱，乏力食少"
+          },
+          "肺": {
+            "weight": 0.5,
+            "description": "肺气不足，乏力气短"
+          },
+          "心": {
+            "weight": 0.4,
+            "description": "心气不足，乏力心悸"
+          },
+          "肾": {
+            "weight": 0.45,
+            "description": "肾气不足，乏力腰酸"
+          }
+        },
+        "wuqi": {
+          "湿": {
+            "weight": 0.65,
+            "description": "湿邪困脾，乏力困重"
+          }
+        }
+      }
+    },
+    "S031": {
+      "name": "食欲不振",
+      "aliases": [
+        "纳呆",
+        "纳差",
+        "不思饮食",
+        "食欲减退"
+      ],
+      "category": "胸腹症状",
+      "dimensions": {
+        "zangfu": {
+          "脾": {
+            "weight": 0.8,
+            "description": "脾失健运，纳呆食少"
+          },
+          "胃": {
+            "weight": 0.7,
+            "description": "胃失和降，纳差"
+          }
+        },
+        "wuqi": {
+          "湿": {
+            "weight": 0.75,
+            "description": "湿困脾土，纳呆腹胀"
+          }
+        },
+        "xieliu": {
+          "食积": {
+            "weight": 0.6,
+            "description": "食积停滞，纳呆厌食"
+          }
+        }
+      }
+    },
+    "S032": {
+      "name": "失眠",
+      "aliases": [
+        "不寐",
+        "入睡困难",
+        "夜寐不安"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "zangfu": {
+          "心": {
+            "weight": 0.8,
+            "description": "心神失养或心火亢盛，失眠心悸"
+          },
+          "肝": {
+            "weight": 0.6,
+            "description": "肝火扰心，失眠多梦易怒"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "心脾两虚，失眠多梦心悸"
+          },
+          "肾": {
+            "weight": 0.55,
+            "description": "心肾不交，失眠心烦"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.5,
+            "description": "痰热扰心，失眠心烦"
+          }
+        }
+      }
+    },
+    "S033": {
+      "name": "烦躁",
+      "aliases": [
+        "心烦",
+        "烦躁不安",
+        "心烦易怒"
+      ],
+      "category": "全身症状",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.8,
+            "description": "火热扰心，烦躁不安"
+          },
+          "暑": {
+            "weight": 0.6,
+            "description": "暑热扰心，烦躁口渴"
+          }
+        },
+        "zangfu": {
+          "心": {
+            "weight": 0.75,
+            "description": "心火亢盛，心烦失眠"
+          },
+          "肝": {
+            "weight": 0.65,
+            "description": "肝火上炎，烦躁易怒"
+          }
+        }
+      }
+    },
+    "S034": {
+      "name": "口苦",
+      "aliases": [
+        "口中苦",
+        "口苦咽干"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "zangfu": {
+          "肝": {
+            "weight": 0.85,
+            "description": "肝胆湿热或肝火上炎，口苦"
+          },
+          "胆": {
+            "weight": 0.8,
+            "description": "胆火上炎，口苦咽干"
+          }
+        },
+        "wuqi": {
+          "火": {
+            "weight": 0.6,
+            "description": "火热上炎，口苦"
+          }
+        }
+      }
+    },
+    "S035": {
+      "name": "口腻",
+      "aliases": [
+        "口中黏腻",
+        "口黏",
+        "口甜"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "湿": {
+            "weight": 0.85,
+            "description": "湿浊上泛，口中黏腻"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.75,
+            "description": "脾虚湿困，口中黏腻或口甜"
+          }
+        }
+      }
+    },
+    "S036": {
+      "name": "头晕",
+      "aliases": [
+        "头昏",
+        "眩晕",
+        "头晕目眩"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.7,
+            "description": "风阳上扰，头晕目眩"
+          },
+          "暑": {
+            "weight": 0.5,
+            "description": "暑热上蒸，头晕头胀"
+          }
+        },
+        "zangfu": {
+          "肝": {
+            "weight": 0.8,
+            "description": "肝阳上亢，头晕目眩急躁"
+          },
+          "心": {
+            "weight": 0.5,
+            "description": "心血不足，头晕心悸"
+          },
+          "脾": {
+            "weight": 0.6,
+            "description": "脾虚气血不足，头晕乏力"
+          },
+          "肾": {
+            "weight": 0.65,
+            "description": "肾精亏虚，头晕耳鸣"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.7,
+            "description": "痰浊上扰，头晕昏蒙"
+          }
+        }
+      }
+    },
+    "S037": {
+      "name": "耳鸣",
+      "aliases": [
+        "耳中鸣响",
+        "耳聋耳鸣"
+      ],
+      "category": "头面症状",
+      "dimensions": {
+        "zangfu": {
+          "肾": {
+            "weight": 0.8,
+            "description": "肾精亏虚或肾阴不足，耳鸣如蝉"
+          },
+          "肝": {
+            "weight": 0.7,
+            "description": "肝火上炎，耳鸣如潮"
+          }
+        },
+        "wuqi": {
+          "风": {
+            "weight": 0.4,
+            "description": "风邪上扰，突发耳鸣"
+          },
+          "火": {
+            "weight": 0.5,
+            "description": "火热上炎，耳鸣耳聋"
+          }
+        }
+      },
+      "tinnitus_types": {
+        "耳鸣如蝉": "肾虚",
+        "耳鸣如潮": "肝火",
+        "耳鸣突发": "风邪或肝火"
+      }
+    },
+    "S038": {
+      "name": "腰痛",
+      "aliases": [
+        "腰酸",
+        "腰脊疼痛",
+        "腰膝酸软"
+      ],
+      "category": "四肢症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.7,
+            "description": "寒湿阻滞，腰痛冷重"
+          },
+          "湿": {
+            "weight": 0.65,
+            "description": "湿热下注，腰痛灼热"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.85,
+            "description": "肾虚，腰膝酸软疼痛"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血阻络，腰痛如刺"
+          }
+        }
+      }
+    },
+    "S039": {
+      "name": "关节疼痛",
+      "aliases": [
+        "关节痛",
+        "痹证",
+        "骨节疼痛"
+      ],
+      "category": "四肢症状",
+      "dimensions": {
+        "wuqi": {
+          "风": {
+            "weight": 0.75,
+            "description": "行痹，关节游走性疼痛"
+          },
+          "寒": {
+            "weight": 0.8,
+            "description": "痛痹，关节冷痛剧烈"
+          },
+          "湿": {
+            "weight": 0.85,
+            "description": "着痹，关节酸痛重着"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.4,
+            "description": "瘀血阻络，关节刺痛"
+          },
+          "痰": {
+            "weight": 0.35,
+            "description": "痰瘀痹阻，关节肿胀变形"
+          }
+        }
+      },
+      "bi_types": {
+        "行痹": "风邪为主，痛无定处",
+        "痛痹": "寒邪为主，痛有定处，遇寒加重",
+        "着痹": "湿邪为主，重着酸痛",
+        "热痹": "湿热为主，红肿热痛"
+      }
+    },
+    "S040": {
+      "name": "四肢厥冷",
+      "aliases": [
+        "手足不温",
+        "手足厥冷",
+        "肢冷"
+      ],
+      "category": "四肢症状",
+      "dimensions": {
+        "zangfu": {
+          "心": {
+            "weight": 0.6,
+            "description": "心阳不足，四肢厥冷"
+          },
+          "脾": {
+            "weight": 0.5,
+            "description": "脾阳不振，手足不温"
+          },
+          "肾": {
+            "weight": 0.7,
+            "description": "肾阳虚衰，四肢厥冷"
+          }
+        },
+        "wuqi": {
+          "寒": {
+            "weight": 0.5,
+            "description": "寒凝经脉，四肢厥冷"
+          }
+        }
+      }
+    },
+    "S041": {
+      "name": "小便不利",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S042": {
+      "name": "耳聋",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S043": {
+      "name": "潮热",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S044": {
+      "name": "自汗",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S045": {
+      "name": "气喘",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S046": {
+      "name": "倦怠",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S047": {
+      "name": "面赤",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S048": {
+      "name": "流浊涕",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S049": {
+      "name": "胁痛",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S050": {
+      "name": "胸痛",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S051": {
+      "name": "脉沉",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S052": {
+      "name": "呕恶",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S053": {
+      "name": "五心烦热",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S054": {
+      "name": "目眩",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S055": {
+      "name": "咽干",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S056": {
+      "name": "舌青紫",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S057": {
+      "name": "脉迟",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S058": {
+      "name": "不寐",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S059": {
+      "name": "心烦",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S060": {
+      "name": "纳减",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S061": {
+      "name": "大便泄",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S062": {
+      "name": "呕吐",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S063": {
+      "name": "腹胀",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S064": {
+      "name": "盗汗",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S065": {
+      "name": "腰膝酸软",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S066": {
+      "name": "恶心",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S067": {
+      "name": "鼻塞",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S068": {
+      "name": "尿黄",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S069": {
+      "name": "食少",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S070": {
+      "name": "心悸",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S071": {
+      "name": "肢冷",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S072": {
+      "name": "流清涕",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S073": {
+      "name": "头项强痛",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S074": {
+      "name": "脉弱",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S075": {
+      "name": "胸满",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    },
+    "S076": {
+      "name": "便溏",
+      "aliases": [],
+      "category": "症状",
+      "dimensions": {
+        "wuqi": {},
+        "zangfu": {},
+        "xieliu": {}
+      }
+    }
+  }
+}
