@@ -1980,6 +1980,451 @@
         "zangfu": {},
         "xieliu": {}
       }
+    },
+    "S077": {
+      "name": "月经量少",
+      "aliases": ["经量少", "经水少", "月经过少"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.7,
+            "description": "寒凝血瘀，经行不畅"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.6,
+            "description": "肾虚精血不足，血海不盈"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.8,
+            "description": "瘀血内阻，经行不畅"
+          }
+        }
+      }
+    },
+    "S078": {
+      "name": "月经有血块",
+      "aliases": ["经血块", "经血有块", "血块"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.6,
+            "description": "寒凝血瘀"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.9,
+            "description": "瘀血凝结成块"
+          }
+        }
+      }
+    },
+    "S079": {
+      "name": "经色暗",
+      "aliases": ["经色紫暗", "色暗", "经血暗"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.6,
+            "description": "寒凝血瘀"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.8,
+            "description": "瘀血内阻"
+          }
+        }
+      }
+    },
+    "S080": {
+      "name": "经期延长",
+      "aliases": ["经期过长", "月经淋漓", "月经淋漓不尽", "八天干净"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.5,
+            "description": "寒凝血瘀，经血不尽"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.6,
+            "description": "肾虚冲任不固"
+          },
+          "脾": {
+            "weight": 0.4,
+            "description": "脾虚气虚不能摄血"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.7,
+            "description": "瘀血内阻，血不归经"
+          }
+        }
+      }
+    },
+    "S081": {
+      "name": "痛经",
+      "aliases": ["经行腹痛", "经期腹痛"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.8,
+            "description": "寒凝胞宫"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.8,
+            "description": "瘀血阻滞"
+          }
+        }
+      }
+    },
+    "S082": {
+      "name": "闭经",
+      "aliases": ["经闭", "不来月经"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.6,
+            "description": "寒凝血瘀"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.7,
+            "description": "肾虚精血不足"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.7,
+            "description": "瘀血阻滞"
+          }
+        }
+      }
+    },
+    "S083": {
+      "name": "月经提前",
+      "aliases": ["月经先期", "经早"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.7,
+            "description": "血热妄行"
+          }
+        },
+        "zangfu": {
+          "肝": {
+            "weight": 0.5,
+            "description": "肝郁化火"
+          },
+          "肾": {
+            "weight": 0.5,
+            "description": "阴虚血热"
+          }
+        }
+      }
+    },
+    "S084": {
+      "name": "月经推迟",
+      "aliases": ["月经后期", "经迟"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.7,
+            "description": "寒凝血瘀"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.6,
+            "description": "肾虚精血不足"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝郁气滞"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血阻滞"
+          },
+          "痰": {
+            "weight": 0.4,
+            "description": "痰湿阻滞"
+          }
+        }
+      }
+    },
+    "S085": {
+      "name": "月经量多",
+      "aliases": ["经量多", "月经过多"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "火": {
+            "weight": 0.7,
+            "description": "血热妄行"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.6,
+            "description": "脾虚气不摄血"
+          },
+          "肾": {
+            "weight": 0.4,
+            "description": "肾虚冲任不固"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血内阻，血不归经"
+          }
+        }
+      }
+    },
+    "S086": {
+      "name": "崩漏",
+      "aliases": ["崩中", "漏下", "经血不止"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "脾": {
+            "weight": 0.6,
+            "description": "脾虚气不摄血"
+          },
+          "肾": {
+            "weight": 0.6,
+            "description": "肾虚冲任不固"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝郁化火"
+          }
+        },
+        "wuqi": {
+          "火": {
+            "weight": 0.5,
+            "description": "血热妄行"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.5,
+            "description": "瘀血内阻"
+          }
+        }
+      }
+    },
+    "S087": {
+      "name": "带下病",
+      "aliases": ["带下", "白带多", "带下异常"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "脾": {
+            "weight": 0.7,
+            "description": "脾虚生湿"
+          }
+        },
+        "xieliu": {
+          "湿": {
+            "weight": 0.8,
+            "description": "湿浊下注"
+          },
+          "痰": {
+            "weight": 0.6,
+            "description": "痰湿阻滞"
+          }
+        }
+      }
+    },
+    "S088": {
+      "name": "带下色白",
+      "aliases": ["白带色白", "白崩"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.6,
+            "description": "寒湿下注"
+          }
+        },
+        "zangfu": {
+          "脾": {
+            "weight": 0.7,
+            "description": "脾虚湿盛"
+          }
+        },
+        "xieliu": {
+          "湿": {
+            "weight": 0.8,
+            "description": "湿浊下注"
+          }
+        }
+      }
+    },
+    "S089": {
+      "name": "带下色黄",
+      "aliases": ["黄带", "白带黄"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "湿": {
+            "weight": 0.6,
+            "description": "湿热下注"
+          },
+          "火": {
+            "weight": 0.7,
+            "description": "湿热蕴结化热"
+          }
+        }
+      }
+    },
+    "S090": {
+      "name": "外阴瘙痒",
+      "aliases": ["阴痒", "外阴痒"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "湿": {
+            "weight": 0.6,
+            "description": "湿浊下注"
+          },
+          "风": {
+            "weight": 0.5,
+            "description": "风邪侵扰"
+          },
+          "火": {
+            "weight": 0.5,
+            "description": "湿热化火"
+          }
+        }
+      }
+    },
+    "S091": {
+      "name": "不孕",
+      "aliases": ["不孕症", "不能怀孕"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "肾": {
+            "weight": 0.8,
+            "description": "肾虚精血不足"
+          },
+          "肝": {
+            "weight": 0.4,
+            "description": "肝郁气滞"
+          }
+        },
+        "wuqi": {
+          "寒": {
+            "weight": 0.5,
+            "description": "宫寒不孕"
+          }
+        },
+        "xieliu": {
+          "瘀": {
+            "weight": 0.6,
+            "description": "瘀血阻滞胞宫"
+          },
+          "痰": {
+            "weight": 0.4,
+            "description": "痰湿阻滞胞宫"
+          }
+        }
+      }
+    },
+    "S092": {
+      "name": "宫寒",
+      "aliases": ["胞宫寒冷", "宫冷"],
+      "category": "妇科症状",
+      "dimensions": {
+        "wuqi": {
+          "寒": {
+            "weight": 0.9,
+            "description": "胞宫虚寒"
+          }
+        },
+        "zangfu": {
+          "肾": {
+            "weight": 0.7,
+            "description": "肾阳虚衰"
+          }
+        }
+      }
+    },
+    "S093": {
+      "name": "更年期综合征",
+      "aliases": ["绝经前后诸证", "更年期", "围绝经期"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "肾": {
+            "weight": 0.9,
+            "description": "肝肾阴虚"
+          },
+          "肝": {
+            "weight": 0.6,
+            "description": "肝郁气滞"
+          },
+          "心": {
+            "weight": 0.5,
+            "description": "心肾不交"
+          }
+        }
+      }
+    },
+    "S094": {
+      "name": "经前乳房胀痛",
+      "aliases": ["乳房胀痛", "经前乳胀"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "肝": {
+            "weight": 0.9,
+            "description": "肝郁气滞"
+          }
+        },
+        "xieliu": {
+          "痰": {
+            "weight": 0.4,
+            "description": "痰瘀互结"
+          }
+        }
+      }
+    },
+    "S095": {
+      "name": "腰膝酸软",
+      "aliases": ["腰膝酸痛", "腰酸痛", "腰膝无力"],
+      "category": "妇科症状",
+      "dimensions": {
+        "zangfu": {
+          "肾": {
+            "weight": 0.9,
+            "description": "肾虚腰膝失养"
+          }
+        }
+      }
     }
   }
 }

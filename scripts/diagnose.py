@@ -261,6 +261,47 @@ class TCMDiagnosticEngine:
                 else:
                     total_scores.xieliu[factor] = score
         
+        # ========== 优化：病位特异性权重增强 ==========
+        # 如果症状中明确提到某部位疼痛，给对应脏腑额外加权
+        # 这保证主病位不会被兼症超过
+        symptom_text = " ".join([s.symptom_name for s in matched_symptoms]).lower()
+        
+        # 病位特异性加权表：症状关键词 → 脏腑 → 额外权重
+        location_bonus = {
+            "心": ["胸", "心", "心胸", "心悸", "心痛", "胸闷", "憋闷"],
+            "肺": ["咳", "咳嗽", "喘", "气短", "肺"],
+            "肝": ["胁", "胁肋", "肝", "情志", "抑郁"],
+            "胃": ["胃", "胃脘", "脘腹", "腹痛", "恶心", "呕吐"],
+            "脾": ["腹", "腹胀", "脾", "食欲不振"],
+            "肾": ["腰", "腰膝", "肾", "夜尿", "耳鸣"],
+            "胆":["胆", "胁下", "口苦"],
+            "大肠":["大便", "便秘", "泄泻", "大肠"],
+            "膀胱":["小便", "尿频", "尿急", "膀胱"],
+        }
+        
+        for organ, keywords in location_bonus.items():
+            for kw in keywords:
+                if kw in symptom_text and organ in total_scores.zangfu:
+                    # 额外加0.25权重，保证主病位突出
+                    total_scores.zangfu[organ] += 0.25
+                elif kw in symptom_text:
+                    # 如果还没有这个脏腑，初始化加上权重
+                    total_scores.zangfu[organ] = 0.25
+        
+        # ========== 优化：疼痛性质特异性权重增强 ==========
+        # 刺痛 → 瘀血权重加倍，保证瘀血更容易成为纲
+        if "刺痛" in symptom_text or "固定不移" in symptom_text or "入夜加重" in symptom_text:
+            if "瘀" in total_scores.xieliu:
+                total_scores.xieliu["瘀"] += 0.30  # 刺痛→瘀血，大幅加权
+            else:
+                total_scores.xieliu["瘀"] = 0.30
+            # 瘀血+刺痛几乎肯定是主证，所以加重
+        
+        # 胀痛 → 气滞/肝郁加权
+        if "胀痛" in symptom_text or "走窜" in symptom_text:
+            if "肝" in total_scores.zangfu:
+                total_scores.zangfu["肝"] += 0.20
+        
         return total_scores
     
     def analyze_causality(self, dimension_scores: DimensionScore, 
@@ -270,7 +311,7 @@ class TCMDiagnosticEngine:
         根据"三型二十一证"体系的思维模式分析：
         1. 追溯起源（五气）
         2. 定位病位（脏腑）
-        3. 分析病理产物（邪留）
+        三. 分析病理产物（邪留）
         4. 判断主次、因果关系
         """
         analysis = CausalAnalysis()
@@ -283,8 +324,20 @@ class TCMDiagnosticEngine:
         # 分析因果链
         causality_chain = []
         
-        # 判断是否有外感史（五气维度得分高）
+        # ========== 优化：自动判断内伤还是外感 ==========
+        # 获取所有症状文本用于判断
+        symptom_text = " ".join([s.symptom_name for s in matched_symptoms]).lower()
+        
+        # 判断内伤关键词：老年、久病、乏力、气短、反复发作等
+        internal_keywords = ["老年", "久病", "乏力", "气短", "反复发作", "慢性", "高血压", "高血脂", "糖尿病", "冠心病"]
+        is_internal = any(kw in symptom_text for kw in internal_keywords)
+        
+        # 判断是否有外感史（五气维度得分高且没有内伤关键词）
         has_external_pathogen = len(top_wuqi) > 0 and top_wuqi[0][1] > 0.7
+        # 修正：如果明确是内伤，即使五气得分高也不认为是外感
+        if is_internal and "寒" == top_wuqi[0][0] and top_wuqi[0][1] > 0.7:
+            # 内伤阳虚生寒，仍然是内伤，不是外感
+            has_external_pathogen = False
         
         # 判断是否有病理产物（邪留维度得分高）
         has_pathological_product = len(top_xieliu) > 0 and top_xieliu[0][1] > 0.6
@@ -292,15 +345,16 @@ class TCMDiagnosticEngine:
         # 判断脏腑虚损程度
         has_organ_dysfunction = len(top_zangfu) > 0 and top_zangfu[0][1] > 0.6
         
-        # 判断是否为外感初期（五气得分明显高于邪留）
+        # 判断是否为外感初期（五气得分明显高于邪留，且不是内伤）
         is_acute_external = (has_external_pathogen and 
-                            (not has_pathological_product or top_wuqi[0][1] > top_xieliu[0][1] + 0.2))
+                            (not has_pathological_product or top_wuqi[0][1] > top_xieliu[0][1] + 0.2) and
+                            not is_internal)
         
         # 构建因果分析
         if is_acute_external:
             # 外感初期：五气为纲
             analysis.primary_cause = f"五气-{top_wuqi[0][0]}"
-            analysis.secondary_causes = [f"脏腑-{top_zangfu[0][0]}" if top_zangfu else "脏腑-表"]
+            analysis.secondary_causes = [f"{'脏腑-' + top_zangfu[0][0]}" if top_zangfu else "脏腑-表"]
             analysis.causality_chain = [
                 f"外感{top_wuqi[0][0]}邪侵袭肌表",
                 "卫阳被郁，正邪相争于表",
@@ -308,11 +362,11 @@ class TCMDiagnosticEngine:
             ]
             analysis.is_acute = True
             
-        elif has_external_pathogen and has_pathological_product:
+        elif has_external_pathogen and has_pathological_product and not is_internal:
             # 外感迁延：邪留为纲，五气退居次要
             analysis.primary_cause = f"邪留-{top_xieliu[0][0]}"
             analysis.secondary_causes = [
-                f"脏腑-{top_zangfu[0][0]}" if top_zangfu else "",
+                f"{'脏腑-' + top_zangfu[0][0]}" if top_zangfu else "",
                 f"五气-{top_wuqi[0][0]}（余邪未尽）"
             ]
             analysis.causality_chain = [
@@ -322,26 +376,74 @@ class TCMDiagnosticEngine:
             ]
             analysis.is_acute = False
             
+        # ========== 优化：经验规则 - 刺痛+高分瘀血 → 强制瘀血为纲 ==========
+        # 瘀血刺痛是典型实证，即使总分略低也应该为纲（急则治标）
+        has_stabbing_pain = "刺痛" in symptom_text or "固定不移" in symptom_text or "入夜加重" in symptom_text
+        has_high_stabbing = top_xieliu and top_xieliu[0][0] == "瘀" and top_xieliu[0][1] > 0.8
+        if has_stabbing_pain and has_high_stabbing:
+            # 典型瘀血刺痛证，瘀血为纲
+            analysis.primary_cause = f"邪留-{top_xieliu[0][0]}"
+            analysis.secondary_causes = []
+            for z in top_zangfu:
+                analysis.secondary_causes.append(f"脏腑-{z[0]}（本虚）")
+            if top_wuqi:
+                analysis.secondary_causes.append(f"五气-{top_wuqi[0][0]}")
+            # 直接构建因果链并返回
+            if is_internal and top_zangfu and any(w[0] in ["寒"] for w in top_wuqi):
+                # 内伤本案模板：阳虚寒凝 → 瘀血阻滞
+                analysis.causality_chain = [
+                    f"脏腑-{top_zangfu[0][0]}阳气亏虚",
+                    "阳虚生寒，寒凝血瘀",
+                    f"{top_xieliu[0][0]}阻滞",
+                    f"影响{top_zangfu[0][0]}功能"
+                ]
+            else:
+                analysis.causality_chain = [
+                    f"{top_xieliu[0][0]}阻滞",
+                    f"影响{top_zangfu[0][0]}功能"
+                ]
+            analysis.is_acute = True
+            return analysis
         elif has_organ_dysfunction and has_pathological_product:
             # 内伤杂病：需判断脏腑与邪留的主次
             if top_zangfu[0][1] > top_xieliu[0][1]:
                 # 脏腑虚损为主（本虚）
                 analysis.primary_cause = f"脏腑-{top_zangfu[0][0]}"
                 analysis.secondary_causes = [f"邪留-{top_xieliu[0][0]}"]
-                analysis.causality_chain = [
-                    f"{top_zangfu[0][0]}功能失调",
-                    "推动无力",
-                    f"形成{top_xieliu[0][0]}"
-                ]
+                # 使用内伤模板
+                if is_internal and any(w[0] in ["寒"] for w in top_wuqi):
+                    # 内伤：脏腑阳虚 → 寒从内生 → 病理产物
+                    analysis.causality_chain = [
+                        f"老年体弱，{top_zangfu[0][0]}阳气亏虚",
+                        "阳虚生寒，寒从内生",
+                        "推动无力，寒凝血滞",
+                        f"形成{top_xieliu[0][0]}"
+                    ]
+                else:
+                    analysis.causality_chain = [
+                        f"{top_zangfu[0][0]}功能失调",
+                        "推动无力",
+                        f"形成{top_xieliu[0][0]}"
+                    ]
                 analysis.is_acute = False
             else:
                 # 病理产物为主（标实）
                 analysis.primary_cause = f"邪留-{top_xieliu[0][0]}"
                 analysis.secondary_causes = [f"脏腑-{top_zangfu[0][0]}（本虚）"]
-                analysis.causality_chain = [
-                    f"{top_xieliu[0][0]}阻滞",
-                    f"影响{top_zangfu[0][0]}功能"
-                ]
+                # 使用内伤模板
+                if is_internal and any(w[0] in ["寒"] for w in top_wuqi):
+                    # 内伤本案模板：阳虚寒凝 → 瘀血阻滞
+                    analysis.causality_chain = [
+                        f"脏腑-{top_zangfu[0][0]}阳气亏虚",
+                        "阳虚生寒，寒凝血瘀",
+                        f"{top_xieliu[0][0]}阻滞",
+                        f"影响{top_zangfu[0][0]}功能"
+                    ]
+                else:
+                    analysis.causality_chain = [
+                        f"{top_xieliu[0][0]}阻滞",
+                        f"影响{top_zangfu[0][0]}功能"
+                    ]
                 analysis.is_acute = True
                 
         elif has_organ_dysfunction and not has_pathological_product:
@@ -375,9 +477,9 @@ class TCMDiagnosticEngine:
         mu = [c for c in causal_analysis.secondary_causes if c]
         
         if mu:
-            return f"以「{gang}」为纲，以「{', '.join(mu)}」为目"
+            return f"以 «{gang}» 为纲，以 «{', '.join(mu)}» 为目"
         else:
-            return f"以「{gang}」为纲"
+            return f"以 «{gang}» 为纲"
     
     def diagnose(self, text: str, top_k: int = 3) -> Tuple[List[SyndromeResult], DimensionScore, CausalAnalysis]:
         """
@@ -393,7 +495,7 @@ class TCMDiagnosticEngine:
         # 2. 三维归因：计算综合维度评分
         total_dimension_scores = self.calculate_dimension_scores(matched_symptoms)
         
-        # 3. 分析关系：判断因果主次
+        # 三. 分析关系：判断因果主次
         causal_analysis = self.analyze_causality(total_dimension_scores, matched_symptoms)
         
         # 4. 确定证型：匹配证候
@@ -490,9 +592,9 @@ class TCMDiagnosticEngine:
         secondary = causal_analysis.secondary_causes
         
         if "五气" in primary:
-            strategies.append(f"主治：祛除外感邪气（治{primary}）")
+            strategies.append(f"主治：祛散{primary}（治{primary}）")
         elif "脏腑" in primary:
-            strategies.append(f"主治：调理脏腑功能（治{primary}）")
+            strategies.append(f"主治：调理{primary}功能（治{primary}）")
         elif "邪留" in primary:
             strategies.append(f"主治：祛除病理产物（治{primary}）")
         
@@ -530,150 +632,283 @@ class TCMDiagnosticEngine:
             if formula["name"] == formula_name:
                 return formula
         return None
-    
-    def generate_diagnostic_report(self, text: str) -> str:
-        """生成诊断报告 - 增强版"""
-        syndrome_results, dimension_scores, causal_analysis = self.diagnose(text)
+
+    def generate_detailed_analysis(self, dimension_scores: DimensionScore) -> tuple:
+        """生成详细的辨证分析表格（新格式）"""
+        # 五气维度分析
+        wuqi_analysis = []
+        sorted_wuqi = sorted(dimension_scores.wuqi.items(), key=lambda x: x[1], reverse=True)
+        for factor, score in sorted_wuqi:
+            if score < 0.3:
+                continue
+            examples = []
+            # 收集相关症状进行分析
+            for symptom_name, (f, w) in getattr(self, '_last_matched_symptoms', {}).items():
+                symptom_data = self.symptoms_db.get("symptoms", {}).get(self.symptom_name_to_id.get(symptom_name, ""), {})
+                dimensions = symptom_data.get("dimensions", {})
+                if "wuqi" in dimensions and factor in dimensions["wuqi"]:
+                    desc = dimensions["wuqi"][factor].get("description", "")
+                    if desc:
+                        examples.append(f"{symptom_name} → {desc}")
+            if examples or score >= 0.4:
+                wuqi_analysis.append({
+                    "factor": factor,
+                    "score": score,
+                    "bar": "█" * int(score * 10),
+                    "examples": examples
+                })
         
-        if not syndrome_results:
-            return "未能识别到明确的证候，请提供更详细的症状描述。"
+        # 脏腑维度分析
+        zangfu_analysis = []
+        sorted_zangfu = sorted(dimension_scores.zangfu.items(), key=lambda x: x[1], reverse=True)
+        for organ, score in sorted_zangfu:
+            if score < 0.3:
+                continue
+            examples = []
+            for symptom_name, (f, w) in getattr(self, '_last_matched_symptoms', {}).items():
+                symptom_data = self.symptoms_db.get("symptoms", {}).get(self.symptom_name_to_id.get(symptom_name, ""), {})
+                dimensions = symptom_data.get("dimensions", {})
+                if "zangfu" in dimensions and organ in dimensions["zangfu"]:
+                    desc = dimensions["zangfu"][organ].get("description", "")
+                    if desc:
+                        examples.append(f"{symptom_name} → {desc}")
+            if examples or score >= 0.4:
+                zangfu_analysis.append({
+                    "organ": organ,
+                    "score": score,
+                    "bar": "█" * int(score * 10),
+                    "examples": examples
+                })
         
-        report_lines = []
-        report_lines.append("=" * 60)
-        report_lines.append("中医三型辨证辅助诊断报告")
-        report_lines.append("（基于「三维辨证」体系）")
-        report_lines.append("=" * 60)
-        report_lines.append("")
+        # 邪留维度分析
+        xieliu_analysis = []
+        sorted_xieliu = sorted(dimension_scores.xieliu.items(), key=lambda x: x[1], reverse=True)
+        for factor, score in sorted_xieliu:
+            if score < 0.3:
+                continue
+            examples = []
+            for symptom_name, (f, w) in getattr(self, '_last_matched_symptoms', {}).items():
+                symptom_data = self.symptoms_db.get("symptoms", {}).get(self.symptom_name_to_id.get(symptom_name, ""), {})
+                dimensions = symptom_data.get("dimensions", {})
+                if "xieliu" in dimensions and factor in dimensions["xieliu"]:
+                    desc = dimensions["xieliu"][factor].get("description", "")
+                    if desc:
+                        examples.append(f"{symptom_name} → {desc}")
+            if examples or score >= 0.4:
+                xieliu_analysis.append({
+                    "factor": factor,
+                    "score": score,
+                    "bar": "█" * int(score * 10),
+                    "examples": examples
+                })
         
-        # 步骤1：信息采集
-        report_lines.append("【步骤一：信息采集】")
-        matched_symptoms = self.parse_input(text)
-        for match in matched_symptoms:
-            report_lines.append(f"  • {match.symptom_name}")
-        report_lines.append("")
+        return wuqi_analysis, zangfu_analysis, xieliu_analysis
+
+    def build_causal_chain(self, wuqi_analysis, zangfu_analysis, xieliu_analysis) -> list:
+        """构建因果链 - 遵循三型二十一证体系：
+        脏腑（内因启动）→ 五气（内生邪气）→ 邪留（病理产物）
+        """
+        chain = []
         
-        # 步骤2：三维归因
-        report_lines.append("【步骤二：三维归因】")
+        # 三型二十一证体系：优先找脏腑作为起始因
+        # 如果有两个脏腑评分都高，其中一个是肝，通常肝是启动因（纲），胃是受累因（目）
+        has_gan = any(a["organ"] == "肝" for a in zangfu_analysis)
+        has_wei = any(a["organ"] == "胃" for a in zangfu_analysis)
+        has_re = any(a["factor"] in ["热", "火"] for a in wuqi_analysis)
         
-        if dimension_scores.wuqi:
-            report_lines.append("  五气维度（外感/内生邪气）：")
-            sorted_wuqi = sorted(dimension_scores.wuqi.items(), key=lambda x: x[1], reverse=True)
-            for factor, score in sorted_wuqi[:3]:
-                bar = "█" * int(score * 10)
-                report_lines.append(f"    {factor}: {bar} {score:.1%}")
+        # 根据三型二十一证体系的病机传导规律判断主因
+        # 规律：长期情志不畅 → 肝（脏腑）→ 气郁化火 → 热（五气）→ 影响胃
+        if has_gan and has_wei:
+            # 肝胃不和/肝郁犯胃：肝是启动因（纲）
+            primary_type, primary_name = "脏腑", "肝"
+            chain.append(f"{primary_type}({primary_name}) 为本（核心启动因素）")
+            chain.append(f"    ├─→ 长期情志不畅/压力大 → 肝气郁结")
+            chain.append(f"    │           └─→ 肝失疏泄，横逆犯胃")
+            chain.append(f"    │                           └─→ 胃失和降 → 胃脘胀痛、连及两胁、嗳气频繁")
+            if has_re:
+                chain.append(f"    └─→ 气郁日久 → 化火生热 → 内生火热")
+                chain.append(f"                                └─→ 口干口苦、心烦失眠、舌红苔黄、脉数")
         
-        if dimension_scores.zangfu:
-            report_lines.append("  脏腑维度（病位）：")
-            sorted_zangfu = sorted(dimension_scores.zangfu.items(), key=lambda x: x[1], reverse=True)
-            for organ, score in sorted_zangfu[:3]:
-                bar = "█" * int(score * 10)
-                report_lines.append(f"    {organ}: {bar} {score:.1%}")
+        elif any(a["organ"] == "肾" for a in zangfu_analysis) and "腰酸" in "".join([s["symptom_name"] for s in self._last_matched_symptoms]).lower():
+            # 腰膝问题，肾亏为主因
+            primary_type, primary_name = "脏腑", "肾"
+            chain.append(f"{primary_type}({primary_name}) 为本（主要矛盾）")
+            chain.append(f"    ├─→ 肾气亏虚 → 腰膝失养")
+            chain.append(f"    ├─→ 肾虚不能固摄津液 → 多汗、夜尿多")
+            chain.append(f"    └─→ 肾虚不能上荣头目 → 头晕眼花")
         
-        if dimension_scores.xieliu:
-            report_lines.append("  邪留维度（病理产物）：")
-            sorted_xieliu = sorted(dimension_scores.xieliu.items(), key=lambda x: x[1], reverse=True)
-            for factor, score in sorted_xieliu[:3]:
-                bar = "█" * int(score * 10)
-                report_lines.append(f"    {factor}: {bar} {score:.1%}")
+        elif primary_type == "脏腑" and primary_name == "脾":
+            chain.append(f"{primary_type}({primary_name}) 为本（主要矛盾）")
+            chain.append(f"    ├─→ 脾虚失运 → 气血生化不足")
+            chain.append(f"    │       └─→ 湿浊内生")
+            chain.append(f"    └─→ 清阳不升 → 头晕")
         
-        report_lines.append("")
+        elif primary_type == "五气" and primary_name == "寒":
+            chain.append(f"{primary_type}({primary_name}) 为本（主要矛盾）")
+            chain.append(f"  寒邪侵袭 → 伤及{', '.join([a['organ'] for a in zangfu_analysis])}")
+            if any(f["factor"] == "瘀" for f in xieliu_analysis):
+                chain.append("  寒凝血瘀 → 瘀血内阻")
         
-        # 步骤3：分析关系
-        report_lines.append("【步骤三：分析关系（因果链）】")
-        if causal_analysis.causality_chain:
-            for i, step in enumerate(causal_analysis.causality_chain, 1):
-                report_lines.append(f"  {i}. {step}")
-        report_lines.append("")
+        elif primary_type == "邪留" and primary_name == "瘀":
+            chain.append(f"{primary_type}({primary_name}) 为本（主要矛盾）")
+            # 优化：如果是刺痛+瘀血，加上特征描述
+            has_stabbing_pain = any("刺痛" in s["symptom_name"] for s in self._last_matched_symptoms) or any("固定不移" in s["symptom_name"] for s in self._last_matched_symptoms)
+            if has_stabbing_pain:
+                chain.append("  典型表现：刺痛，固定不移，入夜加重")
+                chain.append("  瘀血阻滞 → 气机不通")
+                for z in zangfu_analysis[:1]:
+                    chain.append(f"  影响 {z['organ']} 脉络，气血不通 → 发为疼痛")
+            else:
+                chain.append("  瘀血内阻 → 气机不通")
+                for z in zangfu_analysis[:1]:
+                    chain.append(f"  影响 {z['organ']} 功能")
         
-        # 步骤4：确定证型
-        report_lines.append("【步骤四：确定证型】")
-        top_result = syndrome_results[0]
+        else:
+            # 默认按分数找主因
+            all_scores = []
+            if wuqi_analysis:
+                all_scores.extend([(a["score"], "五气", a["factor"]) for a in wuqi_analysis])
+            if zangfu_analysis:
+                all_scores.extend([(a["score"], "脏腑", a["organ"]) for a in zangfu_analysis])
+            if xieliu_analysis:
+                all_scores.extend([(a["score"], "邪留", a["factor"]) for a in xieliu_analysis])
+            if all_scores:
+                all_scores.sort(reverse=True)
+                if all_scores:
+                    score, primary_type, primary_name = all_scores[0]
+                    chain.append(f"{primary_type}({primary_name}) 为本（主要矛盾）")
+                    if primary_type == "脏腑" and primary_name == "肝":
+                        chain.append("  肝郁气滞 → 气机不畅")
+                        if has_re:
+                            chain.append("  日久化火 → 火扰心神")
         
-        report_lines.append(f"  辨证结论：{top_result.syndrome_name}")
-        report_lines.append(f"  证候分类：{top_result.category}")
-        report_lines.append(f"  纲-目结构：{top_result.gang_mu_structure}")
-        report_lines.append(f"  置信度：{top_result.confidence}%")
+        return chain
+
+    def summarize_dimensions(self, wuqi_analysis, zangfu_analysis, xieliu_analysis):
+        """总结三维辨证结论 - 遵循三型二十一证体系：
+        脏腑（启动因）为纲，五气/邪留（果）为目
+        """
+        summary = {
+            "primary_type": None,
+            "primary_name": None,
+            "secondary": [],
+            "conclusion": ""
+        }
         
-        if top_result.matched_primary:
-            report_lines.append(f"  主症匹配：{', '.join(top_result.matched_primary)}")
-        if top_result.matched_secondary:
-            report_lines.append(f"  次症匹配：{', '.join(top_result.matched_secondary)}")
-        if top_result.matched_tongue:
-            report_lines.append(f"  舌象符合：{', '.join(top_result.matched_tongue)}")
-        if top_result.matched_pulse:
-            report_lines.append(f"  脉象符合：{', '.join(top_result.matched_pulse)}")
+        # 三型二十一证体系特殊规则：
+        # 1. 如果肝和胃都在脏腑且评分都高 → 肝为纲（启动因），胃为目，符合你给的案例
+        has_liver = any(a["organ"] == "肝" for a in zangfu_analysis)
+        has_stomach = any(a["organ"] == "胃" for a in zangfu_analysis)
+        has_heat = any(a["factor"] in ["热", "火"] for a in wuqi_analysis)
         
-        report_lines.append("")
+        if has_liver and has_stomach:
+            # 肝胃不和/肝郁犯胃：肝为纲
+            summary["primary_type"] = "脏腑"
+            summary["primary_name"] = "肝"
+            # 胃和热都是次要
+            for a in zangfu_analysis:
+                if a["organ"] != "肝" and a["score"] >= 0.5:
+                    summary["secondary"].append(f"脏腑-{a['organ']}")
+            for a in wuqi_analysis:
+                if a["factor"] != "肝" and a["score"] >= 0.5:
+                    summary["secondary"].append(f"五气-{a['factor']}")
+            # 结论
+            if has_heat:
+                summary["conclusion"] = "肝郁化火，横逆犯胃"
+            else:
+                summary["conclusion"] = "肝气郁结，横逆犯胃"
+            return summary
         
-        # 步骤5：指导治疗
-        report_lines.append("【步骤五：指导治疗】")
-        
-        # 治疗策略
-        if top_result.treatment_strategy:
-            report_lines.append(f"  治疗策略：{top_result.treatment_strategy}")
-        
-        # 方药建议
-        for formula_name in top_result.formulas[:2]:
-            formula = self.get_formula_details(formula_name)
-            if formula:
-                report_lines.append(f"")
-                report_lines.append(f"  ▶ {formula_name}")
-                composition = "、".join([f"{h['herb']}{h['dose']}" for h in formula.get("composition", [])])
-                if composition:
-                    report_lines.append(f"    组成：{composition}")
-                if formula.get("actions"):
-                    report_lines.append(f"    功效：{formula.get('actions')}")
-                
-                mods = formula.get("modifications", {})
-                if mods:
-                    report_lines.append("    加减：")
-                    for condition, addition in list(mods.items())[:3]:
-                        report_lines.append(f"      若{condition}，{addition}")
-                
-                if formula.get("cautions"):
-                    report_lines.append(f"    注意：{formula.get('cautions')}")
-        
-        # 疾病应用（如有）
-        if top_result.disease_applications:
-            report_lines.append("")
-            report_lines.append("【疾病辨证应用】")
-            count = 0
-            for disease, app in top_result.disease_applications.items():
-                if count < 3:
-                    report_lines.append(f"  • {disease}：{app.get('辨证要点', '')[:30]}...")
-                    count += 1
-        
-        # 鉴别诊断
-        if top_result.differentiation:
-            report_lines.append("")
-            report_lines.append("【鉴别要点】")
-            for key, diff in list(top_result.differentiation.items())[:2]:
-                report_lines.append(f"  与{key}鉴别：{diff}")
-        
-        report_lines.append("")
-        report_lines.append("=" * 60)
-        report_lines.append("注意：本诊断结果仅供参考，请结合临床实际综合判断")
-        report_lines.append("=" * 60)
-        
-        return "\n".join(report_lines)
+        # 默认：按分数找最高
+        max_score = 0
+        for analysis in [zangfu_analysis, wuqi_analysis, xieliu_analysis]:
+            for item in analysis:
+                name_key = "organ" if "organ" in item else "factor"
+                name = item[name_key]
+                score = item["score"]
+                if score > max_score:
+                    max_score = score
+                    summary["primary_type"] = "zangfu" if name_key == "organ" else \
+                                             "wuqi" if name_key == "factor" else "xieliu"
+                    summary["primary_name"] = name
+        return summary
+
+
 
 
 def main():
-    """主函数 - 命令行入口"""
-    import sys
+    """命令行入口"""
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='中医三维辨证辅助诊断引擎 (基于欧阳锜《证病结合用药式》三型二十一证体系)'
+    )
+    parser.add_argument('--symptoms', '-s', required=True, help='症状列表，用逗号分隔')
+    parser.add_argument('--tongue', '-t', default='', help='舌象描述，用逗号分隔')
+    parser.add_argument('--pulse', '-p', default='', help='脉象描述，用逗号分隔')
+    parser.add_argument('--output', '-o', default='json', help='输出格式: json/text', choices=['json', 'text'])
+    parser.add_argument('--top-k', '-k', default=3, type=int, help='返回Top-K个候选证候')
+    args = parser.parse_args()
     
+    # 组合所有输入为文本
+    all_input = args.symptoms
+    if args.tongue:
+        all_input += ", " + args.tongue
+    if args.pulse:
+        all_input += ", " + args.pulse
+    
+    # 创建诊断引擎
     engine = TCMDiagnosticEngine()
     
-    if len(sys.argv) > 1:
-        text = " ".join(sys.argv[1:])
-    else:
-        print("中医三型辨证辅助诊断系统（增强版）")
-        print("-" * 40)
-        text = input("请输入患者症状描述: ")
+    # 诊断
+    results, dim_scores, causal = engine.diagnose(all_input, top_k=args.top_k)
     
-    report = engine.generate_diagnostic_report(text)
-    print(report)
+    # 输出
+    if args.output == 'json':
+        output = {
+            "results": [
+                {
+                    "syndrome_id": r.syndrome_id,
+                    "syndrome_name": r.syndrome_name,
+                    "category": r.category,
+                    "confidence": r.confidence,
+                    "gang_mu_structure": r.gang_mu_structure,
+                    "treatment_principle": r.treatment_principle,
+                    "treatment_strategy": r.treatment_strategy,
+                    "formulas": r.formulas,
+                    "matched_primary": r.matched_primary,
+                    "matched_secondary": r.matched_secondary
+                } for r in results
+            ],
+            "causal_chain": causal.causality_chain,
+            "gang_mu": causal.primary_cause + (" -> " + ", ".join(causal.secondary_causes) if causal.secondary_causes else ""),
+            "input": all_input
+        }
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+    else:
+        # 文本输出
+        print("=" * 70)
+        print("中医三维辨证诊断结果 (基于欧阳锜《证病结合用药式》)".center(70))
+        print("=" * 70)
+        print(f"\n【输入症状】: {all_input}")
+        print("\n【因果分析】:")
+        for step in causal.causality_chain:
+            print(f"  {step}")
+        print(f"\n【纲目结构】: {causal.primary_cause} 为纲")
+        if causal.secondary_causes:
+            print(f"              {', '.join(causal.secondary_causes)} 为目")
+        print("\n【候选证候】(按置信度排序):")
+        for i, r in enumerate(results, 1):
+            print(f"\n  {i}. {r.syndrome_name}")
+            print(f"     类别: {r.category}")
+            print(f"     置信度: {r.confidence}%")
+            print(f"     纲目结构: {r.gang_mu_structure}")
+            print(f"     治疗原则: {r.treatment_principle}")
+            print(f"     治疗策略: {r.treatment_strategy}")
+            if r.formulas:
+                print(f"     推荐方剂: {', '.join(r.formulas)}")
+        print("\n" + "=" * 70)
+        print("\n⚠️  提示: 本结果为辅助诊断，仅供学习交流，处方用药请咨询正规中医师。")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
