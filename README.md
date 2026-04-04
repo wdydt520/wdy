@@ -39,7 +39,7 @@ python scripts/diagnose.py --symptoms "发热,恶寒,无汗,头痛" --tongue "�
 ## 目录结构
 
 ```
-tcm-3d-differentiation/
+tcm-3d/
 ├── SKILL.md                    # 技能说明文档
 ├── README.md                   # 本文件
 ├── scripts/

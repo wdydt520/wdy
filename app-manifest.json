@@ -1,12 +1,12 @@
 {
-  "name": "TCM 3D Differentiation",
-  "url": "https://github.com/wdydt520/tcm-3d-differentiation",
+  "name": "中医三维辨证",
+  "url": "https://github.com/wdydt520/tcm-3d",
   "hook_attributes": {
     "url": "https://api.example.com/webhook"
   },
-  "redirect_url": "https://wdydt520.github.io/tcm-3d-differentiation/web/",
-  "setup_url": "https://wdydt520.github.io/tcm-3d-differentiation/web/",
-  "description": "中医三维辨证辅助诊断技能 - 基于「五气-脏腑-邪留」三维辨证框架",
+  "redirect_url": "https://wdydt520.github.io/tcm-3d/web/",
+  "setup_url": "https://wdydt520.github.io/tcm-3d/web/",
+  "description": "中医三维辨证辅助诊断 - 欧阳锜「五气-脏腑-邪留」框架",
   "public": true,
   "default_events": [],
   "default_permissions": {
