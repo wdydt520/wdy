@@ -1,0 +1,51 @@
+
+{
+  "description": "口苦辨证经验规则 - 区分小柴胡汤/龙胆泻肝汤/一贯煎",
+  "rules": [
+    {
+      "name": "小柴胡汤证口苦",
+      "conditions": {
+        "symptoms": ["口苦", "咽干", "目眩", "胸胁苦满", "往来寒热", "心烦喜呕", "嘿嘿不欲饮食"],
+        "key_features": ["口苦+咽干+目眩", "胸胁苦满", "往来寒热"]
+      },
+      "three_dimensional": {
+        "wuqi": ["热"],
+        "zangfu": ["胆", "肝"],
+        "xieliu": []
+      },
+      "conclusion": "少阳病，少阳风热，胆腑郁热",
+      "recommended_formula": "小柴胡汤",
+      "differentiation_points": "核心在于邪在少阳，胆气郁而化热，胆气上逆则口苦。特点是伴随少阳病胆热，舌苔黄腻不重，没有明显的湿热下注表现。"
+    },
+    {
+      "name": "龙胆泻肝汤证口苦",
+      "conditions": {
+        "symptoms": ["口苦", "口苦黏腻", "头痛目赤", "胁痛", "耳聋耳鸣", "带下黄臭", "阴囊湿疹", "小便短赤"],
+        "key_features": ["口苦+苔黄腻", "胁痛口苦", "肝经湿热下注"]
+      },
+      "three_dimensional": {
+        "wuqi": ["湿热", "火"],
+        "zangfu": ["肝", "胆"],
+        "xieliu": ["湿热"]
+      },
+      "conclusion": "肝胆实火上炎，肝经湿热下注",
+      "recommended_formula": "龙胆泻肝汤",
+      "differentiation_points": "核心在于肝胆实火或湿热，口苦是湿热熏蒸，苦味更重，舌苔黄腻明显，常常伴有湿热下注表现（带下、小便短赤等）。"
+    },
+    {
+      "name": "一贯煎证口苦",
+      "conditions": {
+        "symptoms": ["口苦", "咽干口燥", "胁痛", "舌红少津", "脉细弱", "腰膝酸软"],
+        "key_features": ["口苦+舌红少津", "阴虚口苦", "肝肾阴虚"]
+      },
+      "three_dimensional": {
+        "wuqi": ["燥"],
+        "zangfu": ["肝", "肾"],
+        "xieliu": []
+      },
+      "conclusion": "肝肾阴虚，肝郁化火，阴虚燥盛",
+      "recommended_formula": "一贯煎",
+      "differentiation_points": "核心在于肝肾阴虚，阴虚生内热，津液不足，口苦伴有干燥感，舌红少苔或少津，没有湿热征象。"
+    }
+  ]
+}
